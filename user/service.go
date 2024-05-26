@@ -10,6 +10,8 @@ type Service interface {
 	RegisterUser(input RegisterUserInput) (User, error)
 	// bikin kontrak di Service untuk Login
 	Login(input LoginInput) (User, error)
+	// bikin boolean untuk pengecekan email
+	IsEmailAvailable(input CheckEmailInput) (bool, error)
 }
 
 type service struct {
@@ -63,4 +65,20 @@ func (s *service) Login(input LoginInput) (User, error) {
 		return user, err
 	}
 	return user, nil
+}
+
+// Membuat fungsi EmailChecker di front-end
+func (s *service) IsEmailAvailable(input CheckEmailInput) (bool, error) {
+	email := input.Email
+	// kita cari email melalui repository berdasarkan email yg di input user
+	user, err := s.repository.FindByEmail(email)
+	// jika ada error karna kesalahan error
+	if err != nil {
+		return false, err
+	}
+	// jika user nya tidak ada / = 0 maka user bisa register
+	if user.ID == 0 {
+		return true, nil
+	}
+	return false, nil
 }
