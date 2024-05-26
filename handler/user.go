@@ -33,7 +33,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 		// }
 
 		// ambil format error dari FormatError
-		errors := helper.FormatError(err)
+		errors := helper.FormatValidationError(err)
 
 		errorMessage := gin.H{"errors": errors}
 
@@ -56,5 +56,43 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	formatter := user.FormatUser(newUser, "tokentokentoken")
 
 	response := helper.APIResponse("Account has been registered", http.StatusOK, "success", formatter)
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *userHandler) Login(c *gin.Context) {
+	// user memasukkan input  berupa (email & password)
+	// input ditangkap handler
+	// mapping dari input user ke input struct
+	// input struct kita passing ke service
+	// di service mencari dgn bantuan repository user dengan email x
+	// mencocokkan password
+
+	// langkah nya kita buat dimulai dari bawa yaitu repository
+	var input user.LoginInput
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		// ambil format error dari FormatError
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Login failed", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	loggedinUser, err := h.userService.Login(input)
+
+	// jika useri id == 0 maka kesalahan itu di buat
+	if err != nil {
+		errorMessage := gin.H{"errors": err.Error()}
+
+		response := helper.APIResponse("Login failed", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	formatter := user.FormatUser(loggedinUser, "tokentokentoken")
+
+	response := helper.APIResponse("Successfuly Login", http.StatusOK, "success", formatter)
 	c.JSON(http.StatusOK, response)
 }

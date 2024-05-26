@@ -47,12 +47,39 @@ func main() {
 	}
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
+
+	// DI nonaktifkan karna sudah di buat service login nya di service.go
+	// userByEmail, err := userRepository.FindByEmail("postmanlagio@gmail.com")
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+	// if userByEmail.ID == 0 {
+	// 	fmt.Println("user tidak di temukan")
+	// } else {
+	// 	fmt.Println(userByEmail.Name)
+	// }
+
+	// DI nonaktifkan karna sudah di buat di hanler user.go
+	// DAN sudah di buat sessions Login nya di bawah
+	// input := user.LoginInput{
+	// 	Email:    "postmanlagi@gmail.com",
+	// 	Password: "password",
+	// }
+	// user, err := userService.Login(input)
+	// if err != nil {
+	// 	fmt.Println("Terjadi Kesalahan")
+	// 	fmt.Println(err.Error())
+	// }
+	// fmt.Println(user.Email)
+	// fmt.Println(user.Name)
+
 	userHandler := handler.NewUserHandler(userService)
 
 	router := gin.Default()
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
+	api.POST("/sessions", userHandler.Login)
 
 	router.Run()
 
