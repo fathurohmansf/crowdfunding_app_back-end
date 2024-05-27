@@ -12,6 +12,8 @@ type Service interface {
 	Login(input LoginInput) (User, error)
 	// bikin boolean untuk pengecekan email
 	IsEmailAvailable(input CheckEmailInput) (bool, error)
+	// bikin untuk menyimpan gambar avatar profile
+	SaveAvatar(ID int, fileLocation string) (User, error)
 }
 
 type service struct {
@@ -81,4 +83,26 @@ func (s *service) IsEmailAvailable(input CheckEmailInput) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+// Membuat fungsi Save Avatar from jpg/png
+func (s *service) SaveAvatar(ID int, fileLocation string) (User, error) {
+	// 1. dapatkan user berdasarkan ID (ID = 1 untuk sementara)
+	// 2. update attribute avatar file name jpg/png
+	// 3. simpan perubahan avatar file name (simpan ke database)
+
+	// 1
+	user, err := s.repository.FindByID(ID)
+	if err != nil {
+		return user, err
+	}
+	// 2
+	user.AvatarFileName = fileLocation
+
+	//
+	updateUser, err := s.repository.Update(user)
+	if err != nil {
+		return updateUser, err
+	}
+	return updateUser, nil
 }

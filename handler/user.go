@@ -3,6 +3,7 @@ package handler
 import (
 	"crowdfunding/helper"
 	"crowdfunding/user"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -135,5 +136,55 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 	}
 
 	response := helper.APIResponse(metaMessage, http.StatusOK, "succes", data)
+	c.JSON(http.StatusOK, response)
+}
+
+// fungsi untuk upload avatar .jpg
+func (h *userHandler) UploadAvatar(c *gin.Context) {
+	// input dari user dlm bentuk .jpg dan .png
+	// simpan gambar nya di folder "images/"
+	// di service kita panggil repo (service.go)
+	// JWT (sementara hardcode, seakan2 user yg login ID = 1)
+	// repo ambil data user dari yg ID = 1 (untuk ambil data" user) (main.go)
+	// repo update data user simpan lokasi file (images/) (repository.go)
+
+	// kerjakan di mulai dari bawah
+
+	file, err := c.FormFile("avatar") // Nama field nya avatar
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.APIResponse("Failed to upload avatar image value .jpg/.png", http.StatusBadRequest, "error", data)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	// harusnya dapat JWT, tapi sabar :)
+	userID := 1
+
+	// images/namafile.png (ini yang lama)
+	// path := "images/" + file.Filename
+	// images/1-namafile.png (ini yang BARU karna ada ID di depan 1)
+	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
+	// fungsi Sprintf untuk menggabungkan string
+	// %d itu userID
+	// %s itu file.Filename
+
+	err = c.SaveUploadedFile(file, path)
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.APIResponse("Failed to upload avatar image222", http.StatusBadRequest, "error", data)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	_, err = h.userService.SaveAvatar(userID, path)
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.APIResponse("Failed to upload avatar image", http.StatusBadRequest, "error", data)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	data := gin.H{"is_uploaded": true}
+	response := helper.APIResponse("Avatar successfuly uploaded", http.StatusOK, "success", data)
 	c.JSON(http.StatusOK, response)
 }

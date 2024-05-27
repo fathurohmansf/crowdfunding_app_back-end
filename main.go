@@ -48,6 +48,9 @@ func main() {
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
 
+	// Untuk SET avatar manual UPLOAD berdasarkan ID = 1
+	userService.SaveAvatar(1, "images/1-profile.png")
+
 	// DI nonaktifkan karna sudah di buat service login nya di service.go
 	// userByEmail, err := userRepository.FindByEmail("postmanlagio@gmail.com")
 	// if err != nil {
@@ -81,6 +84,7 @@ func main() {
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
+	api.POST("/avatars", userHandler.UploadAvatar)
 
 	router.Run()
 
