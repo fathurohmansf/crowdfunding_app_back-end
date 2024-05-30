@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crowdfunding/auth"
 	"crowdfunding/handler"
 	"crowdfunding/user"
 	"log"
@@ -47,9 +48,13 @@ func main() {
 	}
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
+	authService := auth.NewService()
+
+	// untuk cek di terminal token nya muncul
+	// fmt.Println(authService.GenerateToken(1001))
 
 	// Untuk SET avatar manual UPLOAD berdasarkan ID = 1
-	userService.SaveAvatar(1, "images/1-profile.png")
+	//userService.SaveAvatar(1, "images/1-profile.png")
 
 	// DI nonaktifkan karna sudah di buat service login nya di service.go
 	// userByEmail, err := userRepository.FindByEmail("postmanlagio@gmail.com")
@@ -76,7 +81,7 @@ func main() {
 	// fmt.Println(user.Email)
 	// fmt.Println(user.Name)
 
-	userHandler := handler.NewUserHandler(userService)
+	userHandler := handler.NewUserHandler(userService, authService) //tambahkan authService
 
 	router := gin.Default()
 	api := router.Group("/api/v1")
