@@ -1,18 +1,23 @@
 package auth
 
 import (
+	"errors"
+
 	"github.com/dgrijalva/jwt-go"
 )
 
 // Membuat service baru
 type Service interface {
 	GenerateToken(userID int) (string, error)
+	// Untuk Validasi token / ttd
+	ValidateToken(token string) (*jwt.Token, error)
 }
 
 type jwtService struct {
 }
 
 // SECRET_KEY ini bersifat sementara ga boleh taro mentah codingan gini
+// Ini itu Verify Signature / validasi token ttd online
 var SECRET_KEY = []byte("BWASTARTUP_s3cr3T_k3y")
 
 // aktifkan fungsi service jwt
@@ -34,4 +39,20 @@ func (s *jwtService) GenerateToken(userID int) (string, error) {
 		return signToken, err
 	}
 	return signToken, nil
+}
+
+// Fungsi untuk Validasi Token / Signature ttd token
+func (s *jwtService) ValidateToken(encondedtoken string) (*jwt.Token, error) {
+	token, err := jwt.Parse(encondedtoken, func(token *jwt.Token) (interface{}, error) {
+		_, ok := token.Method.(*jwt.SigningMethodHMAC)
+
+		if !ok {
+			return nil, errors.New("Invalid token")
+		}
+		return []byte(SECRET_KEY), nil
+	})
+	if err != nil {
+		return token, err
+	}
+	return token, nil
 }
