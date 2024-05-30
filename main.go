@@ -4,6 +4,7 @@ import (
 	"crowdfunding/auth"
 	"crowdfunding/handler"
 	"crowdfunding/user"
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -50,6 +51,18 @@ func main() {
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 
+	// Membuat Validate Token JWT manual dulu
+	token, err := authService.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2fQ.GZXFQ5Pf7tzjTlwiBSeqLNTvCQifXYoaIUwATVa1ZP8")
+	if err != nil {
+		fmt.Println("ERROR")
+		fmt.Println("ERROR")
+		fmt.Println("ERROR")
+	}
+	if token.Valid {
+		fmt.Println("TOKEN VALID")
+	} else {
+		fmt.Println("TOKEN INVALID")
+	}
 	// untuk cek di terminal token nya muncul
 	// fmt.Println(authService.GenerateToken(1001))
 
