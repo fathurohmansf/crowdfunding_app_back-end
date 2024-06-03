@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -106,7 +107,7 @@ func main() {
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
-	api.POST("/avatars", userHandler.UploadAvatar)
+	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
 
 	router.Run()
 }
@@ -121,15 +122,54 @@ func main() {
 // ambil user dari db berdasarkan user_id lewat service (user/service.go)
 // kita set context isinya user (context itu tempat untuk menyimpan suatu nilai nanti bisa di GET dari tempat yg lain)
 
-// Kita kerjakan Middleware
-func authMiddleware(c *gin.Context) {
-	authHeader := c.GetHeader("Authorization")
-	if !strings.Contains(authHeader, "Bearer") {
-		response := helper.APIResponse(" Unautorized", http.StatusUnauthorized, "error", nil)
-		// pake AbortWithStatusJSON karna middle, kalo proses nya lancar dari user ke middle dulu baru ke UploadAvatar
-		c.AbortWithStatusJSON(http.StatusUnauthorized, response)
-		return
+// Kita kerjakan Middleware(1)
+func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {
+	// Kita kerjakan Middleware (1)
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if !strings.Contains(authHeader, "Bearer") {
+			response := helper.APIResponse(" Unautorized", http.StatusUnauthorized, "error", nil)
+			// pake AbortWithStatusJSON karna middle, kalo proses nya lancar dari user ke middle dulu baru ke UploadAvatar
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
+		// Untuk menghapus Bearer nya, hanya dapet token nya aja gini cara nya
+		// Bearer tokentokentoken
+		tokenString := ""
+		arrayToken := strings.Split(authHeader, " ")
+		if len(arrayToken) == 2 {
+			tokenString = arrayToken[1]
+		}
+
+		token, err := authService.ValidateToken(tokenString)
+		if err != nil {
+			response := helper.APIResponse(" Unautorized", http.StatusUnauthorized, "error", nil)
+			// pake AbortWithStatusJSON karna middle, kalo proses nya lancar dari user ke middle dulu baru ke UploadAvatar
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
+
+		claim, ok := token.Claims.(jwt.MapClaims)
+
+		if !ok || !token.Valid {
+			response := helper.APIResponse(" Unautorized", http.StatusUnauthorized, "error", nil)
+			// pake AbortWithStatusJSON karna middle, kalo proses nya lancar dari user ke middle dulu baru ke UploadAvatar
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
+		userID := int(claim["user_id"].(float64))
+
+		user, err := userService.GetUserByID(userID)
+		if err != nil {
+			response := helper.APIResponse(" Unautorized", http.StatusUnauthorized, "error", nil)
+			// pake AbortWithStatusJSON karna middle, kalo proses nya lancar dari user ke middle dulu baru ke UploadAvatar
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
+
+		c.Set("currentUser", user)
 	}
+
 }
 
 // Cara manual RegisterUserInput karna sudah di buat auto oleh handler
