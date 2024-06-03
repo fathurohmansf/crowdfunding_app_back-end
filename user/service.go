@@ -14,6 +14,8 @@ type Service interface {
 	IsEmailAvailable(input CheckEmailInput) (bool, error)
 	// bikin untuk menyimpan gambar avatar profile
 	SaveAvatar(ID int, fileLocation string) (User, error)
+	// Middleware dapet kan user byID
+	GetUserByID(ID int) (User, error)
 }
 
 type service struct {
@@ -105,4 +107,17 @@ func (s *service) SaveAvatar(ID int, fileLocation string) (User, error) {
 		return updateUser, err
 	}
 	return updateUser, nil
+}
+
+// Middleware impelemtasi
+func (s *service) GetUserByID(ID int) (User, error) {
+	user, err := s.repository.FindByID(ID)
+	if err != nil {
+		return user, err
+	}
+	// buat pengecekan jika ada error
+	if user.ID == 0 {
+		return user, errors.New("No user found on with that ID")
+	}
+	return user, nil
 }

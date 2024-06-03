@@ -3,8 +3,11 @@ package main
 import (
 	"crowdfunding/auth"
 	"crowdfunding/handler"
+	"crowdfunding/helper"
 	"crowdfunding/user"
 	"log"
+	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -106,23 +109,43 @@ func main() {
 	api.POST("/avatars", userHandler.UploadAvatar)
 
 	router.Run()
-
-	// Cara manual RegisterUserInput karna sudah di buat auto oleh handler
-	// userInput := user.RegisterUserInput{}
-	// userInput.Name = " Test simpan dari service"
-	// userInput.Email = "contoh@gmail.com"
-	// userInput.Occupation = "anak band"
-	// userInput.Password = "password"
-
-	// userService.RegisterUser(userInput)
-
-	// beda lagi
-	// user := user.User{
-	// 	Name: "Test Simpan",
-	// }
-	// userRepository.Save(user)
-
 }
+
+// Middleware Authentication
+// Cara nya = (di kerjain dari bawah dulu)
+// Ambil nilai header Authorization: Bearer tokentokentoken (jadi dari client kirim Auth bearer, lalu ambil header nya)
+// Dari header Authorization, kita ambil nilai tokennya aja
+// Kita Validasi token (pake service Validatetoken)
+// jika token valid,
+// kita ambil user_id
+// ambil user dari db berdasarkan user_id lewat service (user/service.go)
+// kita set context isinya user (context itu tempat untuk menyimpan suatu nilai nanti bisa di GET dari tempat yg lain)
+
+// Kita kerjakan Middleware
+func authMiddleware(c *gin.Context) {
+	authHeader := c.GetHeader("Authorization")
+	if !strings.Contains(authHeader, "Bearer") {
+		response := helper.APIResponse(" Unautorized", http.StatusUnauthorized, "error", nil)
+		// pake AbortWithStatusJSON karna middle, kalo proses nya lancar dari user ke middle dulu baru ke UploadAvatar
+		c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+		return
+	}
+}
+
+// Cara manual RegisterUserInput karna sudah di buat auto oleh handler
+// userInput := user.RegisterUserInput{}
+// userInput.Name = " Test simpan dari service"
+// userInput.Email = "contoh@gmail.com"
+// userInput.Occupation = "anak band"
+// userInput.Password = "password"
+
+// userService.RegisterUser(userInput)
+
+// beda lagi
+// user := user.User{
+// 	Name: "Test Simpan",
+// }
+// userRepository.Save(user)
 
 // NOTED
 // Untuk mengakses DataBase itu harus mengunakan function layering
