@@ -55,23 +55,27 @@ func main() {
 	userRepository := user.NewRepository(db)
 	// tambahkan campaigns API ke db
 	campaignRepository := campaign.NewRepository(db)
-
-	campaigns, err := campaignRepository.FindByUserID(1)
-	fmt.Println("debug")
-	fmt.Println("debuging")
-	fmt.Println(len(campaigns)) // ini cara mengetahui ada berapa data di campaign
-
-	for _, campaign := range campaigns {
-		fmt.Println(campaign.Name)
-		if len(campaign.CampaignImages) > 0 {
-			fmt.Println("Jumlah gambar")
-			fmt.Println(len(campaign.CampaignImages))
-			fmt.Println(campaign.CampaignImages[2].FileName)
-		}
-	}
-
 	userService := user.NewService(userRepository)
+	campaignService := campaign.NewService(campaignRepository)
 	authService := auth.NewService()
+
+	campaigns, _ := campaignService.FindCampaigns(1) // karna 0 berarti ambil semua campaign
+	fmt.Println(len(campaigns))
+
+	// DI nonaktifkan karna ini manual untuk mencari repository campaign
+	// campaigns, err := campaignRepository.FindByUserID(1)
+	// fmt.Println("debug")
+	// fmt.Println("debuging")
+	// fmt.Println(len(campaigns)) // ini cara mengetahui ada berapa data di campaign
+
+	// for _, campaign := range campaigns {
+	// 	fmt.Println(campaign.Name)
+	// 	if len(campaign.CampaignImages) > 0 {
+	// 		fmt.Println("Jumlah gambar")
+	// 		fmt.Println(len(campaign.CampaignImages))
+	// 		fmt.Println(campaign.CampaignImages[2].FileName)
+	// 	}
+	// }
 
 	// INI dimatikan karna akan di buat / dipanggil di middleware
 	// Membuat Validate Token JWT manual dulu

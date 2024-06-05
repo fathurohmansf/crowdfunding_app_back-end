@@ -13,6 +13,8 @@ func NewService(repository Repository) *service {
 }
 
 func (s *service) FindCampaigns(userID int) ([]Campaign, error) {
+	// switching, kalo userID = 0, jika userID ada
+	// data nya maka akan menampilkan campaign sesuai user itu yg di buat
 	if userID != 0 {
 		campaigns, err := s.repository.FindByUserID(userID)
 		if err != nil {
