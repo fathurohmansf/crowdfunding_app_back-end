@@ -2,9 +2,11 @@ package main
 
 import (
 	"crowdfunding/auth"
+	"crowdfunding/campaign"
 	"crowdfunding/handler"
 	"crowdfunding/helper"
 	"crowdfunding/user"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -51,6 +53,23 @@ func main() {
 		// router.Run()
 	}
 	userRepository := user.NewRepository(db)
+	// tambahkan campaigns API ke db
+	campaignRepository := campaign.NewRepository(db)
+
+	campaigns, err := campaignRepository.FindByUserID(1)
+	fmt.Println("debug")
+	fmt.Println("debuging")
+	fmt.Println(len(campaigns)) // ini cara mengetahui ada berapa data di campaign
+
+	for _, campaign := range campaigns {
+		fmt.Println(campaign.Name)
+		if len(campaign.CampaignImages) > 0 {
+			fmt.Println("Jumlah gambar")
+			fmt.Println(len(campaign.CampaignImages))
+			fmt.Println(campaign.CampaignImages[2].FileName)
+		}
+	}
+
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 
