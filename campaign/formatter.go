@@ -3,12 +3,12 @@ package campaign
 // membuat struct
 type CampaignFormatter struct {
 	ID               int    `json:"id"`
-	UserID           int    `json: "user_id"`
+	UserID           int    `json:"user_id"`
 	Name             string `json:"name"`
-	ShortDescription string `json: "short_description"`
-	ImageURL         string `json: "image_url"`
-	GoalAmount       int    `json: "goal_amout"`
-	CurrentAmount    int    `json: "current_amount"`
+	ShortDescription string `json:"short_description"`
+	ImageURL         string `json: image_url"`
+	GoalAmount       int    `json:"goal_amout"`
+	CurrentAmount    int    `json:"current_amount"`
 }
 
 // fungsi untuk format struct campaign di entity.go supaya jadi struct CampaignFormatter
@@ -31,7 +31,14 @@ func FormatCampaign(campaign Campaign) CampaignFormatter {
 
 // fungsi untuk slice of campaign parameter nya bisa di call
 func FormatCampaigns(campaigns []Campaign) []CampaignFormatter {
-	var campaignsFormatter []CampaignFormatter
+	// Ini di buat lebih simple null jadi 0 (lebih clean code)
+	campaignsFormatter := []CampaignFormatter{}
+	// pengecekan jika campaigns 0 itu null jadi 0 di json
+	// if len(campaigns) == 0 {
+	// 	return []CampaignFormatter{}
+	// }
+	// buat variable
+	// var campaignsFormatter []CampaignFormatter
 
 	// buat perulangan jika banyak campaigns
 	for _, campaign := range campaigns {
