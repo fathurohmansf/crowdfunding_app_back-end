@@ -9,6 +9,7 @@ type CampaignFormatter struct {
 	ImageURL         string `json: image_url"`
 	GoalAmount       int    `json:"goal_amout"`
 	CurrentAmount    int    `json:"current_amount"`
+	Slug             string `json:"slug"`
 }
 
 // fungsi untuk format struct campaign di entity.go supaya jadi struct CampaignFormatter
@@ -20,6 +21,7 @@ func FormatCampaign(campaign Campaign) CampaignFormatter {
 	CampaignFormatter.ShortDescription = campaign.ShortDescription
 	CampaignFormatter.GoalAmount = campaign.GoalAmount
 	CampaignFormatter.CurrentAmount = campaign.CurrentAmount
+	CampaignFormatter.Slug = campaign.Slug
 	CampaignFormatter.ImageURL = ""
 
 	// untuk pengecek an bahwa punya gambar

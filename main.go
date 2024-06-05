@@ -127,6 +127,8 @@ func main() {
 	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
 
 	router := gin.Default()
+	// membuat static images supaya bisa di akses routing folder nya
+	router.Static("/images", "./images")
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
