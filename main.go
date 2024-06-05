@@ -6,7 +6,6 @@ import (
 	"crowdfunding/handler"
 	"crowdfunding/helper"
 	"crowdfunding/user"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -59,8 +58,9 @@ func main() {
 	campaignService := campaign.NewService(campaignRepository)
 	authService := auth.NewService()
 
-	campaigns, _ := campaignService.GetCampaigns(0) // karna 0 berarti ambil semua campaign
-	fmt.Println(len(campaigns))
+	// DI nonaktifkan karna list of campaign akan di buat HANDLER nya di main.go
+	// campaigns, _ := campaignService.GetCampaigns(0) // karna 0 berarti ambil semua campaign
+	// fmt.Println(len(campaigns))
 
 	// DI nonaktifkan karna ini manual untuk mencari repository campaign
 	// campaigns, err := campaignRepository.FindByUserID(1)
@@ -122,7 +122,9 @@ func main() {
 	// fmt.Println(user.Email)
 	// fmt.Println(user.Name)
 
-	userHandler := handler.NewUserHandler(userService, authService) //tambahkan authService
+	// HANDLER
+	userHandler := handler.NewUserHandler(userService, authService) // tambahkan authService
+	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
 
 	router := gin.Default()
 	api := router.Group("/api/v1")
@@ -131,6 +133,8 @@ func main() {
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
+	// Ambil data campaigns get dari server
+	api.GET("/campaigns", campaignHandler.GetCampaigns)
 
 	router.Run()
 }
