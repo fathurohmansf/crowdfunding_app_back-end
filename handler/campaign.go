@@ -33,13 +33,14 @@ func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 	// Harus Convert to int
 	userID, _ := strconv.Atoi(c.Query("user_id"))
 
+	// BALIKAN dari campaigns ini adalah slice of []campaign
 	campaigns, err := h.service.GetCampaigns(userID)
 	if err != nil {
 		response := helper.APIResponse("Error to get campaigns", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-	response := helper.APIResponse("list of campaigns", http.StatusOK, "succes", campaigns)
+	response := helper.APIResponse("list of campaigns", http.StatusOK, "succes", campaign.FormatCampaigns(campaigns))
 	c.JSON(http.StatusOK, response)
 	return
 }

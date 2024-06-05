@@ -28,3 +28,17 @@ func FormatCampaign(campaign Campaign) CampaignFormatter {
 	}
 	return CampaignFormatter
 }
+
+// fungsi untuk slice of campaign parameter nya bisa di call
+func FormatCampaigns(campaigns []Campaign) []CampaignFormatter {
+	var campaignsFormatter []CampaignFormatter
+
+	// buat perulangan jika banyak campaigns
+	for _, campaign := range campaigns {
+		// dapatkan single object campaign dulu
+		campaignFormatter := FormatCampaign(campaign)
+		// baru di append menjadi object campaigns jadi banyak
+		campaignsFormatter = append(campaignsFormatter, campaignFormatter)
+	}
+	return campaignsFormatter
+}
