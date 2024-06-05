@@ -13,6 +13,7 @@ import (
 // INGAT di kerjakan dari bawah dulu
 // tangkap parameter di handler
 // handler ke service
+// buat formatter sesuai JSON yg di inginkan Front-End(formatter.go)
 // service yg menentukan repository mana yg di-call (service.go)
 // repository, buat dua : FindAll, FindByUserID(repository.go)
 // db
