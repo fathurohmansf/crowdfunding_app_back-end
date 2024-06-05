@@ -59,7 +59,7 @@ func main() {
 	campaignService := campaign.NewService(campaignRepository)
 	authService := auth.NewService()
 
-	campaigns, _ := campaignService.FindCampaigns(1) // karna 0 berarti ambil semua campaign
+	campaigns, _ := campaignService.GetCampaigns(0) // karna 0 berarti ambil semua campaign
 	fmt.Println(len(campaigns))
 
 	// DI nonaktifkan karna ini manual untuk mencari repository campaign

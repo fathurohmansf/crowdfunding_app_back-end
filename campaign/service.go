@@ -1,7 +1,7 @@
 package campaign
 
 type Service interface {
-	FindCampaigns(userID int) ([]Campaign, error)
+	GetCampaigns(userID int) ([]Campaign, error)
 }
 
 type service struct {
@@ -12,7 +12,7 @@ func NewService(repository Repository) *service {
 	return &service{repository}
 }
 
-func (s *service) FindCampaigns(userID int) ([]Campaign, error) {
+func (s *service) GetCampaigns(userID int) ([]Campaign, error) {
 	// switching, kalo userID = 0, jika userID ada
 	// data nya maka akan menampilkan campaign sesuai user itu yg di buat
 	if userID != 0 {
