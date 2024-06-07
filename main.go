@@ -137,6 +137,7 @@ func main() {
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
 	// Ambil data campaigns get dari server
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
+	//api.GET("/campaigns/:id", campaignHandler.GetCampaign)
 
 	router.Run()
 }

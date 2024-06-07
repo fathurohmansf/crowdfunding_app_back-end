@@ -45,9 +45,27 @@ func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 	return
 }
 
-// buat handler baru
+// buat handler baru, abis di buat taro handler di main.go jgn lupa
 func (h *campaignHandler) GetCampaign(c *gin.Context) {
-	// handler : mapping id yg di url ke struct input = service, call formatter
-	// Service : inputnya struct input => untuk menangkap ID  di url, memanggil repo (service.go)
+	// bentuk nya : api/v1/campaign/1    ini cth nya berdasarkan id
+	// handler : mapping id yg di url ke struct input = service, call formatter (campaign.go & main.go)
+	// Service : inputnya struct input => untuk menangkap ID  di url, memanggil repo (service.go & input.go)
 	// butuh repository : get campaign by ID (repository.go)
+
+	// var input campaign.GetCampaignDetailInput
+	// err := c.ShouldBindUri(&input)
+	// if err != nil {
+	// 	response := helper.APIResponse(" Failed to get of campaign", http.StatusBadRequest, "Error", nil)
+	// 	c.JSON(http.StatusBadRequest, response)
+	// 	return
+	// }
+	// campaign, err := h.service.GetCampaignByID(input)
+	// if err != nil {
+	// 	response := helper.APIResponse(" Failed to get of campaign", http.StatusBadRequest, "Error", nil)
+	// 	c.JSON(http.StatusBadRequest, response)
+	// 	return
+	// }
+
+	// response := helper.APIResponse("Campaign detail", http.StatusOK, "success", campaign)
+	// c.JSON(http.StatusOK, response)
 }
