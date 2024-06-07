@@ -49,5 +49,5 @@ func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 func (h *campaignHandler) GetCampaign(c *gin.Context) {
 	// handler : mapping id yg di url ke struct input = service, call formatter
 	// Service : inputnya struct input => untuk menangkap ID  di url, memanggil repo
-	// butuh repository : get campaign by ID
+	// butuh repository : get campaign by ID (repository.go)
 }
