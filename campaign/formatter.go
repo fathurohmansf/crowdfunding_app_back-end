@@ -46,7 +46,7 @@ func FormatCampaigns(campaigns []Campaign) []CampaignFormatter {
 	for _, campaign := range campaigns {
 		// dapatkan single object campaign dulu
 		campaignFormatter := FormatCampaign(campaign)
-		// baru di append menjadi object campaigns jadi banyak
+		// baru di append menjadi object campaigns jadi banyakkkk
 		campaignsFormatter = append(campaignsFormatter, campaignFormatter)
 	}
 	return campaignsFormatter
