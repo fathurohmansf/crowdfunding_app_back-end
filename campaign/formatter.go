@@ -113,5 +113,24 @@ func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
 
 	campaignDetailFormatter.User = campaignUserFormatter
 
+	// Cara panggil Images di formatter data nya bakal muncul
+	images := []CampaignImageFormatter{} // karna bentuk nya slice [] harus di append
+
+	for _, image := range campaign.CampaignImages {
+		campaignImageFormatter := CampaignImageFormatter{}
+		campaignImageFormatter.ImageURL = image.FileName
+
+		isPrimary := false
+
+		if image.IsPrimary == 1 {
+			isPrimary = true
+		}
+
+		campaignImageFormatter.IsPrimary = isPrimary
+		// ini di append
+		images = append(images, campaignImageFormatter)
+	}
+	campaignDetailFormatter.Images = images
+
 	return campaignDetailFormatter
 }
