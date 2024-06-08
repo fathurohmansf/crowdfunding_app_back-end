@@ -127,7 +127,7 @@ func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
 		}
 
 		campaignImageFormatter.IsPrimary = isPrimary
-		// ini di append
+		// ini di append nya
 		images = append(images, campaignImageFormatter)
 	}
 	campaignDetailFormatter.Images = images
