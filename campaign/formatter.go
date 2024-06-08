@@ -69,10 +69,16 @@ type CampaignDetailFormatter struct {
 	Perks            []string `json:"perks"`
 	// Membuat struct User di dalam struct CampaignDetailFormatter
 	User CampaignUserFormatter `json:"user"`
+	// Membuat struct images di dlm struct CampaignDetailFormatter
+	Images []CampaignImageFormatter `json:"images"`
 }
 type CampaignUserFormatter struct {
 	Name     string `json:"name"`
 	ImageURL string `json:"image_url"`
+}
+type CampaignImageFormatter struct {
+	ImageURL  string `json:"image_url"`
+	IsPrimary bool   `json:"is_primary"`
 }
 
 // Fungsi Format campaigndetailByID
