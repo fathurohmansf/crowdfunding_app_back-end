@@ -99,7 +99,7 @@ func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
 
 	campaignDetailFormatter.Perks = perks
 
-	// cara panggil user di formatter
+	// cara panggil user di formatter data nya bakal muncul
 	user := campaign.User
 	campaignUserFormatter := CampaignUserFormatter{}
 	campaignUserFormatter.Name = user.Name
