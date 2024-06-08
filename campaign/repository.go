@@ -46,7 +46,7 @@ func (r *repository) FindByUserID(userID int) ([]Campaign, error) {
 // buat implementasi dari interface FindByID
 func (r *repository) FindByID(ID int) (Campaign, error) {
 	var campaign Campaign
-	err := r.db.Preload("User").Where("id = ?", ID).Preload("CampaignImages").First(&campaign).Error // .Preload("User")
+	err := r.db.Preload("User").Preload("CampaignImages").Where("id = ?", ID).Find(&campaign).Error // .Preload("User")
 	if err != nil {
 		return campaign, err
 	}

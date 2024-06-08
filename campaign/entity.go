@@ -18,13 +18,13 @@ type Campaign struct {
 	Slug             string
 	CreatedAt        time.Time
 	UpdatedAt        time.Time
-	CampaignImages   []CampaignImage `gorm:"foreignKey:CampaignID"`
-	User             user.User       `gorm:"foreignKey:UserID"`
+	CampaignImages   []CampaignImage
+	User             user.User
 }
 
 type CampaignImage struct {
-	ID         int `gorm:"primaryKey"`
-	CampaignID int `gorm:"column:campaign_id"`
+	ID         int
+	CampaignID int
 	FileName   string
 	IsPrimary  int
 	CreatedAt  time.Time

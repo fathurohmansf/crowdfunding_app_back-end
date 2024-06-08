@@ -1,5 +1,7 @@
 package campaign
 
+import "strings"
+
 // membuat struct
 type CampaignFormatter struct {
 	ID               int    `json:"id"`
@@ -14,21 +16,21 @@ type CampaignFormatter struct {
 
 // fungsi untuk format struct campaign di entity.go supaya jadi struct CampaignFormatter
 func FormatCampaign(campaign Campaign) CampaignFormatter {
-	CampaignFormatter := CampaignFormatter{}
-	CampaignFormatter.ID = campaign.ID
-	CampaignFormatter.UserID = campaign.UserID
-	CampaignFormatter.Name = campaign.Name
-	CampaignFormatter.ShortDescription = campaign.ShortDescription
-	CampaignFormatter.GoalAmount = campaign.GoalAmount
-	CampaignFormatter.CurrentAmount = campaign.CurrentAmount
-	CampaignFormatter.Slug = campaign.Slug
-	CampaignFormatter.ImageURL = ""
+	campaignFormatter := CampaignFormatter{}
+	campaignFormatter.ID = campaign.ID
+	campaignFormatter.UserID = campaign.UserID
+	campaignFormatter.Name = campaign.Name
+	campaignFormatter.ShortDescription = campaign.ShortDescription
+	campaignFormatter.GoalAmount = campaign.GoalAmount
+	campaignFormatter.CurrentAmount = campaign.CurrentAmount
+	campaignFormatter.Slug = campaign.Slug
+	campaignFormatter.ImageURL = ""
 
 	// untuk pengecek an bahwa punya gambar
 	if len(campaign.CampaignImages) > 0 {
-		CampaignFormatter.ImageURL = campaign.CampaignImages[0].FileName
+		campaignFormatter.ImageURL = campaign.CampaignImages[0].FileName
 	}
-	return CampaignFormatter
+	return campaignFormatter
 }
 
 // fungsi untuk slice of campaign parameter nya bisa di call
@@ -50,4 +52,60 @@ func FormatCampaigns(campaigns []Campaign) []CampaignFormatter {
 		campaignsFormatter = append(campaignsFormatter, campaignFormatter)
 	}
 	return campaignsFormatter
+}
+
+// Buat Struct untuk CampaignDetailByID
+// localhost:8080/api/v1/campaigns/1
+type CampaignDetailFormatter struct {
+	ID               int      `json:"id"`
+	Name             string   `json:"name"`
+	ShortDescription string   `json:"short_description"`
+	Description      string   `json:"description"`
+	ImageURL         string   `json:"image_url"`
+	GoalAmount       int      `json:"goal_amout"`
+	CurrentAmount    int      `json:"current_amout"`
+	UserID           int      `json:"user_id"`
+	Slug             string   `json:"slug"`
+	Perks            []string `json:"perks"`
+	// Membuat struct User di dalam struct CampaignDetailFormatter
+	User CampaignUserFormatter `json:"user"`
+}
+type CampaignUserFormatter struct {
+	Name     string `json:"name"`
+	ImageURL string `json:"image_url"`
+}
+
+// Fungsi Format campaigndetailByID
+func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
+	campaignDetailFormatter := CampaignDetailFormatter{}
+	campaignDetailFormatter.ID = campaign.ID
+	campaignDetailFormatter.Name = campaign.Name
+	campaignDetailFormatter.ShortDescription = campaign.ShortDescription
+	campaignDetailFormatter.Description = campaign.Description
+	campaignDetailFormatter.GoalAmount = campaign.GoalAmount
+	campaignDetailFormatter.CurrentAmount = campaign.CurrentAmount
+	campaignDetailFormatter.Slug = campaign.Slug
+	campaignDetailFormatter.ImageURL = ""
+
+	if len(campaign.CampaignImages) > 0 {
+		campaignDetailFormatter.ImageURL = campaign.CampaignImages[0].FileName
+	}
+
+	var perks []string
+	// SPLIT ini fungsi nya untuk dapet perulangan string perks satu, perks dua
+	for _, perk := range strings.Split(campaign.Perks, ",") {
+		perks = append(perks, strings.TrimSpace(perk))
+	}
+
+	campaignDetailFormatter.Perks = perks
+
+	// cara panggil user di formatter
+	user := campaign.User
+	campaignUserFormatter := CampaignUserFormatter{}
+	campaignUserFormatter.Name = user.Name
+	campaignUserFormatter.ImageURL = user.AvatarFileName
+
+	campaignDetailFormatter.User = campaignUserFormatter
+
+	return campaignDetailFormatter
 }
