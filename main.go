@@ -59,11 +59,14 @@ func main() {
 	authService := auth.NewService()
 
 	// DI nonaktifkan karna list of campaign akan di buat HANDLER nya di main.go
-	// campaigns, _ := campaignService.GetCampaigns(0) // karna 0 berarti ambil semua campaign
+	// campaigns, _ := campaignService.GetCampaigns(1) // karna 0 berarti ambil semua campaign
 	// fmt.Println(len(campaigns))
 
 	// DI nonaktifkan karna ini manual untuk mencari repository campaign
-	// campaigns, err := campaignRepository.FindByUserID(1)
+	// ini FindAll
+	//campaigns, err := campaignRepository.FindAll()
+	// Ini FindByUserID
+	// campaigns, err := campaignRepository.FindByUserID(0)
 	// fmt.Println("debug")
 	// fmt.Println("debuging")
 	// fmt.Println(len(campaigns)) // ini cara mengetahui ada berapa data di campaign
@@ -127,7 +130,8 @@ func main() {
 	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
 
 	router := gin.Default()
-	// membuat static images supaya bisa di akses routing folder nya
+	// membuat static images supaya bisa di akses routing folder nya langsung di browser
+	// cth = http://localhost:8080/images/16-Green%20Ui%20Design%20Letter%20U%20Logo.png
 	router.Static("/images", "./images")
 	api := router.Group("/api/v1")
 
@@ -137,7 +141,7 @@ func main() {
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
 	// Ambil data campaigns get dari server
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
-	//api.GET("/campaigns/:id", campaignHandler.GetCampaign)
+	api.GET("/campaigns/:id", campaignHandler.GetCampaign)
 
 	router.Run()
 }

@@ -52,20 +52,20 @@ func (h *campaignHandler) GetCampaign(c *gin.Context) {
 	// Service : inputnya struct input => untuk menangkap ID  di url, memanggil repo (service.go & input.go)
 	// butuh repository : get campaign by ID (repository.go)
 
-	// var input campaign.GetCampaignDetailInput
-	// err := c.ShouldBindUri(&input)
-	// if err != nil {
-	// 	response := helper.APIResponse(" Failed to get of campaign", http.StatusBadRequest, "Error", nil)
-	// 	c.JSON(http.StatusBadRequest, response)
-	// 	return
-	// }
-	// campaign, err := h.service.GetCampaignByID(input)
-	// if err != nil {
-	// 	response := helper.APIResponse(" Failed to get of campaign", http.StatusBadRequest, "Error", nil)
-	// 	c.JSON(http.StatusBadRequest, response)
-	// 	return
-	// }
+	var input campaign.GetCampaignDetailInput
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse(" Failed to get of campaign", http.StatusBadRequest, "Error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	campaign, err := h.service.GetCampaignByID(input)
+	if err != nil {
+		response := helper.APIResponse(" Failed to get of campaign", http.StatusBadRequest, "Error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
 
-	// response := helper.APIResponse("Campaign detail", http.StatusOK, "success", campaign)
-	// c.JSON(http.StatusOK, response)
+	response := helper.APIResponse("Campaign detail", http.StatusOK, "success", campaign)
+	c.JSON(http.StatusOK, response)
 }

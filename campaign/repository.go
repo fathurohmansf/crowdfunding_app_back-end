@@ -6,7 +6,7 @@ type Repository interface {
 	FindAll() ([]Campaign, error)
 	FindByUserID(userID int) ([]Campaign, error)
 	// GET Campaign ByID
-	//FindByID(ID int) (Campaign, error)
+	FindByID(ID int) (Campaign, error)
 }
 
 type repository struct {
@@ -21,19 +21,22 @@ func NewRepository(db *gorm.DB) *repository {
 func (r *repository) FindAll() ([]Campaign, error) {
 	var campaigns []Campaign
 
-	err := r.db.Preload("CampaignImages", "campaign_images.is_primary = 1").Find(&campaigns).Error
+	err := r.db.Find(&campaigns).Error //.Find("CampaignImages", "campaign_images.is_primary = 1")
 	if err != nil {
 		return campaigns, err
 	}
 	return campaigns, nil
 }
 
+// Fungsi untuk ambil data FindByUserID
 func (r *repository) FindByUserID(userID int) ([]Campaign, error) {
 	var campaigns []Campaign
 	// fungsi Preload ini relasi untuk campaign images
-	err := r.db.Where("user_id = ?", userID).Preload("CampaignImages").Find(&campaigns).Error
+	//err := r.db.Where("user_id = ?", userID).Preload("CampaignImages").Find(&campaigns).Error
 	// Di nonaktifkan karna hanya untuk menampilkan primary true saja (1)
-	//err := r.db.Where("user_id = ?", userID).Preload("CampaignImages", "campaign_images.is_primary = 1").Find(&campaigns).Error
+	err := r.db.Where("user_id = ?", userID).Preload("CampaignImages", "campaign_images.is_primary = 1").Find(&campaigns).Error
+	// Cek error kalo udh ga error apus aja
+	//err := r.db.Where("user_id = ?", userID).Find(&campaigns).Error
 	if err != nil {
 		return campaigns, err
 	}
@@ -41,11 +44,11 @@ func (r *repository) FindByUserID(userID int) ([]Campaign, error) {
 }
 
 // buat implementasi dari interface FindByID
-// func (r *repository) FindByID(ID int) (Campaign, error) {
-// 	var campaign Campaign
-// 	err := r.db.Preload("User").Preload("CampaignImages").Where("id = ?", ID).Find(&campaign).Error
-// 	if err != nil {
-// 		return campaign, err
-// 	}
-// 	return campaign, nil
-// }
+func (r *repository) FindByID(ID int) (Campaign, error) {
+	var campaign Campaign
+	err := r.db.Preload("User").Where("id = ?", ID).Preload("CampaignImages").First(&campaign).Error // .Preload("User")
+	if err != nil {
+		return campaign, err
+	}
+	return campaign, nil
+}

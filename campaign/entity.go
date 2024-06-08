@@ -1,30 +1,30 @@
 package campaign
 
 import (
-	"os/user"
+	"crowdfunding/user"
 	"time"
 )
 
 type Campaign struct {
 	ID               int
-	userID           int
+	UserID           int
 	Name             string
 	ShortDescription string
 	Description      string
-	perks            string
+	Perks            string
 	BackerCount      int
 	GoalAmount       int
 	CurrentAmount    int
 	Slug             string
 	CreatedAt        time.Time
 	UpdatedAt        time.Time
-	CampaignImages   []CampaignImage
-	User             user.User
+	CampaignImages   []CampaignImage `gorm:"foreignKey:CampaignID"`
+	User             user.User       `gorm:"foreignKey:UserID"`
 }
 
 type CampaignImage struct {
-	ID         int
-	CampaignID int
+	ID         int `gorm:"primaryKey"`
+	CampaignID int `gorm:"column:campaign_id"`
 	FileName   string
 	IsPrimary  int
 	CreatedAt  time.Time
