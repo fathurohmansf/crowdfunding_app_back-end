@@ -1,5 +1,7 @@
 package campaign
 
+import "github.com/gosimple/slug"
+
 type Service interface {
 	GetCampaigns(userID int) ([]Campaign, error)
 	// GET campaign ByID
@@ -51,8 +53,8 @@ func (s *service) CreateCampaign(input CreateCampaignInput) (Campaign, error) {
 	campaign.Perks = input.Perks
 	campaign.GoalAmount = input.GoalAmount
 	campaign.UserID = input.User.ID
-
-	// pembuatan slug nanti
+	// SLUG di buat nanti pakai libarary https://github.com/gosimple/slug = ke terminal = go get -u github.com/gosimple/slug
+	campaign.Slug = slug.Make(input.Name) //Nama Camapaign 10 => nama-campaign-10
 
 	// save campaign baru
 	newCampaign, err := s.repository.Save(campaign)
