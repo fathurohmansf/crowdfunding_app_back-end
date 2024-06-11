@@ -7,6 +7,8 @@ type Repository interface {
 	FindByUserID(userID int) ([]Campaign, error)
 	// GET Campaign ByID
 	FindByID(ID int) (Campaign, error)
+	// untuk Create Campaign API
+	Save(campaign Campaign) (Campaign, error)
 }
 
 type repository struct {
@@ -47,6 +49,15 @@ func (r *repository) FindByUserID(userID int) ([]Campaign, error) {
 func (r *repository) FindByID(ID int) (Campaign, error) {
 	var campaign Campaign
 	err := r.db.Preload("User").Preload("CampaignImages").Where("id = ?", ID).Find(&campaign).Error // .Preload("User")
+	if err != nil {
+		return campaign, err
+	}
+	return campaign, nil
+}
+
+// buat implementasi fungsi dari Create Campaign API
+func (r *repository) Save(campaign Campaign) (Campaign, error) {
+	err := r.db.Create(&campaign).Error
 	if err != nil {
 		return campaign, err
 	}
