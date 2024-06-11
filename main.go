@@ -152,10 +152,12 @@ func main() {
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
-	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
+	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar) //Middleware karna mau upload itu harus login user dulu ga sembarangan upload
 	// Ambil data campaigns get dari server
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
 	api.GET("/campaigns/:id", campaignHandler.GetCampaign)
+	// route untuk CreateCampaign API
+	api.POST("/campaigns", authMiddleware(authService, userService), campaignHandler.CreateCampaign) //Middleware karna mau upload itu harus login user dulu ga sembarangan upload
 
 	router.Run()
 }
