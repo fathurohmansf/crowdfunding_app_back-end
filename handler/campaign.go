@@ -74,5 +74,5 @@ func (h *campaignHandler) GetCampaign(c *gin.Context) {
 // Penerapan Create API
 // Tangkap parameter dari user ke input struct
 // Ambil current user dari jwt/handler
-// Panggil service, parameternya input struct (dan juga buat slug)
-// panggil repository untuk simpan data campaign baru
+// Panggil service, parameternya input struct (dan juga buat slug) (service.go dan input.go)
+// panggil repository untuk simpan data campaign baru (repository.go)
