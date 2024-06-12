@@ -109,8 +109,33 @@ func (h *campaignHandler) CreateCampaign(c *gin.Context) {
 }
 
 // UPDATE Campaign API handler
-// handler
-// mapping dari input ke input struct (ada 2 , 1.dari form input user 2.dari uri byID(api/v1/camapaign/1))
+// handler ( yg ada 2 tadi diterapkan )
+// mapping dari input ke input struct (ada 2 , 1.dari uri byID(api/v1/camapaign/1) 2.dari form input user)
 // input dari user, dan juga input yg ada di uri (passing ke service)
 // service ( untuk buat logic gimana update ) (find campaign byID uri, lalu tangkap parameter yg ada di input form)
 // repository update data campaign
+
+// buat fungsi handler di sini
+func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
+	// SATU dari Uri ByID, ambil code dari handler GetCampaign
+	var inputID campaign.GetCampaignDetailInput
+	err := c.ShouldBindUri(&inputID)
+	if err != nil {
+		response := helper.APIResponse(" Failed to update campaign", http.StatusBadRequest, "Error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	// DUA dari form input user, ambil code dari handler CreateCampaign
+	var inputData campaign.CreateCampaignInput
+
+	err = c.ShouldBindJSON(&inputData)
+	if err != nil {
+		// ambil format error dari FormatError
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to update campaign", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+}
