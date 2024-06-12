@@ -13,7 +13,7 @@ type Service interface {
 	// Membuat Create campaign API
 	CreateCampaign(input CreateCampaignInput) (Campaign, error)
 	// UPDATE buat update campaign API
-	Update(inputID GetCampaignDetailInput, inputData CreateCampaignInput) (Campaign, error)
+	UpdateCampaign(inputID GetCampaignDetailInput, inputData CreateCampaignInput) (Campaign, error)
 }
 
 type service struct {
@@ -73,7 +73,7 @@ func (s *service) CreateCampaign(input CreateCampaignInput) (Campaign, error) {
 }
 
 // UPDATE implementasi interfaces Update
-func (s *service) Update(inputID GetCampaignDetailInput, inputData CreateCampaignInput) (Campaign, error) {
+func (s *service) UpdateCampaign(inputID GetCampaignDetailInput, inputData CreateCampaignInput) (Campaign, error) {
 	campaign, err := s.repository.FindByID(inputID.ID)
 	if err != nil {
 		return campaign, err
