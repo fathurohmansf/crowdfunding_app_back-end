@@ -1,6 +1,7 @@
 package campaign
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/gosimple/slug"
@@ -78,6 +79,13 @@ func (s *service) UpdateCampaign(inputID GetCampaignDetailInput, inputData Creat
 	if err != nil {
 		return campaign, err
 	}
+	// Penbuatan fungsi untuk saat update campaign itu harus User punya campaign ga boleh user lain
+	if campaign.UserID != inputData.User.ID {
+		// UserID itu yang punya data/campaign , User.ID user yang punya request untuk update data/campaign
+		// jika == maka allow, jika != maka muncul error.New di bawah ini
+		return campaign, errors.New("Not an owner of the campaign")
+	}
+
 	// fungsi di bawah ini untuk update data dari data lama ke data baru untuk di update
 	campaign.Name = inputData.Name
 	campaign.ShortDescription = inputData.ShortDescription
