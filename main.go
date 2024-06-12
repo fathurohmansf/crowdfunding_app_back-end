@@ -158,6 +158,8 @@ func main() {
 	api.GET("/campaigns/:id", campaignHandler.GetCampaign)
 	// route untuk CreateCampaign API
 	api.POST("/campaigns", authMiddleware(authService, userService), campaignHandler.CreateCampaign) //Middleware karna mau upload itu harus login user dulu ga sembarangan upload
+	// route untuk UpdateCampaign API
+	api.PUT("/campaigns/:id", authMiddleware(authService, userService), campaignHandler.UpdateCampaign) //Middleware karna mau upload itu harus login user dulu ga sembarangan upload
 
 	router.Run()
 }
