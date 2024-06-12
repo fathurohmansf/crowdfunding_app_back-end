@@ -112,5 +112,5 @@ func (h *campaignHandler) CreateCampaign(c *gin.Context) {
 // handler
 // mapping dari input ke input struct (ada 2 , 1.dari form input user 2.dari uri byID(api/v1/camapaign/1))
 // input dari user, dan juga input yg ada di uri (passing ke service)
-// service ( untuk buat logic gimana update )
+// service ( untuk buat logic gimana update ) (find campaign byID uri, lalu tangkap parameter yg ada di input form)
 // repository update data campaign
