@@ -59,18 +59,18 @@ func main() {
 	authService := auth.NewService()
 
 	// MANUAL input Campaign baru (CreateCampaign API)
-	input := campaign.CreateCampaignInput{}
-	input.Name = "test CreateCampaignAPI"
-	input.ShortDescription = "short"
-	input.Description = "looooooong"
-	input.GoalAmount = 10000000
-	input.Perks = "Hadiah satu, dua, tiga"
-	inputUser, _ := userService.GetUserByID(17) //ambil data userID = 1
-	input.User = inputUser
-	_, err = campaignService.CreateCampaign(input)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	// input := campaign.CreateCampaignInput{}
+	// input.Name = "test CreateCampaignAPI"
+	// input.ShortDescription = "short"
+	// input.Description = "looooooong"
+	// input.GoalAmount = 10000000
+	// input.Perks = "Hadiah satu, dua, tiga"
+	// inputUser, _ := userService.GetUserByID(17) //ambil data userID = 1
+	// input.User = inputUser
+	// _, err = campaignService.CreateCampaign(input)
+	// if err != nil {
+	// 	log.Fatal(err.Error())
+	// }
 
 	// DI nonaktifkan karna list of campaign akan di buat HANDLER nya di main.go
 	// campaigns, _ := campaignService.GetCampaigns(1) // karna 0 berarti ambil semua campaign
