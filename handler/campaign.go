@@ -115,7 +115,7 @@ func (h *campaignHandler) CreateCampaign(c *gin.Context) {
 // service ( untuk buat logic gimana update ) (find campaign byID uri, lalu tangkap parameter yg ada di input form)
 // repository update data campaign
 
-// buat fungsi handler di sini
+// buat fungsi handler di sini UpdateCampaign API
 func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
 	// SATU dari Uri ByID, ambil code dari handler GetCampaign
 	var inputID campaign.GetCampaignDetailInput
