@@ -46,7 +46,7 @@ func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 	return
 }
 
-// buat handler baru, abis di buat taro handler di main.go jgn lupa
+// GETALL Campaign buat handler baru, abis di buat taro handler di main.go jgn lupa
 func (h *campaignHandler) GetCampaign(c *gin.Context) {
 	// bentuk nya : api/v1/campaign/1    ini cth nya berdasarkan id
 	// handler : mapping id yg di url ke struct input = service, call formatter (campaign.go & main.go)
@@ -71,7 +71,7 @@ func (h *campaignHandler) GetCampaign(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// Buat handler baru untuk Create Campaign API
+// CREATE Campaign API untuk Buat handler baru
 // Penerapan Create API
 // Tangkap parameter dari user ke input struct
 // Ambil current user dari jwt/handler
@@ -107,3 +107,10 @@ func (h *campaignHandler) CreateCampaign(c *gin.Context) {
 	response := helper.APIResponse("Success to create campaign", http.StatusOK, "success", campaign.FormatCampaign(newCapaign))
 	c.JSON(http.StatusOK, response)
 }
+
+// UPDATE Campaign API handler
+// handler
+// mapping dari input ke input struct (ada 2 , 1.dari form input user 2.dari uri byID(api/v1/camapaign/1))
+// input dari user, dan juga input yg ada di uri (passing ke service)
+// service ( untuk buat logic gimana update )
+// repository update data campaign
