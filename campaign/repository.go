@@ -11,6 +11,8 @@ type Repository interface {
 	Save(campaign Campaign) (Campaign, error)
 	// UPDATE Campaign API untuk update
 	Update(campaign Campaign) (Campaign, error)
+	// UPLOAD Campaign Image API
+	CreateImage(CampaignImage CampaignImage) (CampaignImage, error)
 }
 
 type repository struct {
@@ -73,4 +75,13 @@ func (r *repository) Update(campaign Campaign) (Campaign, error) {
 		return campaign, err
 	}
 	return campaign, nil
+}
+
+// UPLOAD Campaign Image API
+func (r *repository) CreateImage(CampaignImage CampaignImage) (CampaignImage, error) {
+	err := r.db.Create(&CampaignImage).Error
+	if err != nil {
+		return CampaignImage, err
+	}
+	return CampaignImage, nil
 }
