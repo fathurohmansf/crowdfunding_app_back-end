@@ -103,16 +103,16 @@ func (s *service) UpdateCampaign(inputID GetCampaignDetailInput, inputData Creat
 	return updatedCampaign, nil
 }
 
-// Implementasi interface UPLOAD Campaign Image API
+// UPLOAD Implementasi interface UPLOAD Campaign Image API
 func (s *service) SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error) {
 	// Membuat definisi awal isPrimary = 0/false
 	isPrimary := 0
 	// Jika saat user klik/input maka nilai nya true
-	if input.IsPrimay {
+	if input.IsPrimary {
 		isPrimary = 1
 	}
 	// Pengecekan is_primary nya true
-	if input.IsPrimay {
+	if input.IsPrimary {
 		_, err := s.repository.MarkAllImagesAsNonPrimary(input.CampaignID)
 		if err != nil {
 			return CampaignImage{}, err

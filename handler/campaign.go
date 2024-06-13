@@ -167,12 +167,14 @@ func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
 // implemetasi handler UPLOAD Campaign Image API
 func (h *campaignHandler) UploadImage(c *gin.Context) {
 	var input campaign.CreateCampaignImageInput
-
 	// karna pakai form jadi ShouldBind aja, bukan ShouldBindJSON
 	err := c.ShouldBind(&input)
 	if err != nil {
-		response := helper.APIResponse(" Failed to upload Campaign Image", http.StatusBadRequest, "Error", nil)
-		c.JSON(http.StatusBadRequest, response)
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to create campaign", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
 	file, err := c.FormFile("file")
@@ -184,7 +186,6 @@ func (h *campaignHandler) UploadImage(c *gin.Context) {
 	}
 	currentUser := c.MustGet("currentUser").(user.User)
 	userID := currentUser.ID
-
 	// images/1-namafile.png (ini yang BARU karna ada ID di depan 1)
 	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
 	err = c.SaveUploadedFile(file, path)
