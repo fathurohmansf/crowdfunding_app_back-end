@@ -159,6 +159,6 @@ func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
 // 1. tangkap input dan ubah struct input
 // 2. save image campaign ke suatu folder
 // Service (kondisi manggil point 2 di repo, panggil repo point 1)
-// repository :
+// repository : (repository.go)
 // 1. create image/save data image ke dalam tabel campaign_images
 // 2. ubah is_primary true ke false, true yg sebelum nya akan jadi false, jadi inti nya hanya 1 gambar aja yang is_primary = true

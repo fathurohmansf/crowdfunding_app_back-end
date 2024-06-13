@@ -16,3 +16,10 @@ type CreateCampaignInput struct {
 	Perks            string `json:"perks" binding:"required"`
 	User             user.User
 }
+
+// Membuat struct baru untuk UPDATE is_primary menjadi 0 dari 1 (untuk kebutuhan service.go)
+type CreateCampaignImageInput struct {
+	// pake form karna user tidak dalam bentuk json kaya di atas
+	CampaignID int  `form:"campaign_id" binding:"required"`
+	IsPrimay   bool `form:"is_primary" binding:"required"`
+}

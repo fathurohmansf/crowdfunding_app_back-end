@@ -79,7 +79,7 @@ func (r *repository) Update(campaign Campaign) (Campaign, error) {
 	return campaign, nil
 }
 
-// UPLOAD Campaign Image API
+// UPLOAD Campaign Image API point 1
 func (r *repository) CreateImage(CampaignImage CampaignImage) (CampaignImage, error) {
 	err := r.db.Create(&CampaignImage).Error
 	if err != nil {
@@ -88,7 +88,7 @@ func (r *repository) CreateImage(CampaignImage CampaignImage) (CampaignImage, er
 	return CampaignImage, nil
 }
 
-// Membuat fungsi dari interfaces ISprimary images = true
+// Membuat fungsi dari interfaces ISprimary images = true, point 2
 func (r *repository) MarkAllImagesAsNonPrimary(campaignID int) (bool, error) {
 	// QUERY nya
 	// Update campaign_images SET is_primary = false WHERE campaign_id = 1

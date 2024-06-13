@@ -15,6 +15,8 @@ type Service interface {
 	CreateCampaign(input CreateCampaignInput) (Campaign, error)
 	// UPDATE buat update campaign API
 	UpdateCampaign(inputID GetCampaignDetailInput, inputData CreateCampaignInput) (Campaign, error)
+	// UPLOAD Campaign Image API
+	SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error)
 }
 
 type service struct {
@@ -99,4 +101,31 @@ func (s *service) UpdateCampaign(inputID GetCampaignDetailInput, inputData Creat
 		return updatedCampaign, err
 	}
 	return updatedCampaign, nil
+}
+
+// Implementasi interface UPLOAD Campaign Image API
+func (s *service) SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error) {
+	// Membuat definisi awal isPrimary = 0/false
+	isPrimary := 0
+	// Jika saat user klik/input maka nilai nya true
+	if input.IsPrimay {
+		isPrimary = 1
+	}
+	// Pengecekan is_primary nya true
+	if input.IsPrimay {
+		_, err := s.repository.MarkAllImagesAsNonPrimary(input.CampaignID)
+		if err != nil {
+			return CampaignImage{}, err
+		}
+	}
+	campaignImage := CampaignImage{}
+	campaignImage.CampaignID = input.CampaignID
+	campaignImage.IsPrimary = isPrimary
+	campaignImage.FileName = fileLocation
+
+	newCampaignImage, err := s.repository.CreateImage(campaignImage)
+	if err != nil {
+		return newCampaignImage, err
+	}
+	return newCampaignImage, nil
 }
