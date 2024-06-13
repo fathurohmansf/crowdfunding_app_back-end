@@ -161,4 +161,4 @@ func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
 // Service (kondisi manggil point 2 di repo, panggil repo point 1)
 // repository :
 // 1. create image/save data image ke dalam tabel campaign_images
-// 2. ubah is_primary true ke false, true yg sebelum nya akan jadi false
+// 2. ubah is_primary true ke false, true yg sebelum nya akan jadi false, jadi inti nya hanya 1 gambar aja yang is_primary = true

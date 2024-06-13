@@ -13,6 +13,8 @@ type Repository interface {
 	Update(campaign Campaign) (Campaign, error)
 	// UPLOAD Campaign Image API
 	CreateImage(CampaignImage CampaignImage) (CampaignImage, error)
+	// ISPRIMARY = TRUE , untuk campaign images
+	MarkAllImagesAsNonPrimary(campaignID int) (bool, error)
 }
 
 type repository struct {
@@ -84,4 +86,16 @@ func (r *repository) CreateImage(CampaignImage CampaignImage) (CampaignImage, er
 		return CampaignImage, err
 	}
 	return CampaignImage, nil
+}
+
+// Membuat fungsi dari interfaces ISprimary images = true
+func (r *repository) MarkAllImagesAsNonPrimary(campaignID int) (bool, error) {
+	// QUERY nya
+	// Update campaign_images SET is_primary = false WHERE campaign_id = 1
+	err := r.db.Model(&CampaignImage{}).Where("campaign_id ?", campaignID).Update("is_primary", false).Error
+
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
