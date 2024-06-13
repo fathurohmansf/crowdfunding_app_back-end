@@ -4,6 +4,7 @@ import (
 	"crowdfunding/campaign"
 	"crowdfunding/helper"
 	"crowdfunding/user"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -162,3 +163,45 @@ func (h *campaignHandler) UpdateCampaign(c *gin.Context) {
 // repository : (repository.go)
 // 1. create image/save data image ke dalam tabel campaign_images
 // 2. ubah is_primary true ke false, true yg sebelum nya akan jadi false, jadi inti nya hanya 1 gambar aja yang is_primary = true
+
+// implemetasi handler UPLOAD Campaign Image API
+func (h *campaignHandler) UploadImage(c *gin.Context) {
+	var input campaign.CreateCampaignImageInput
+
+	// karna pakai form jadi ShouldBind aja, bukan ShouldBindJSON
+	err := c.ShouldBind(&input)
+	if err != nil {
+		response := helper.APIResponse(" Failed to upload Campaign Image", http.StatusBadRequest, "Error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	file, err := c.FormFile("file")
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.APIResponse("Failed to upload campaign image", http.StatusBadRequest, "error", data)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	currentUser := c.MustGet("currentUser").(user.User)
+	userID := currentUser.ID
+
+	// images/1-namafile.png (ini yang BARU karna ada ID di depan 1)
+	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
+	err = c.SaveUploadedFile(file, path)
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.APIResponse("Failed to upload Campaign Image", http.StatusBadRequest, "error", data)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	_, err = h.service.SaveCampaignImage(input, path)
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.APIResponse("Failed to upload campaign image", http.StatusBadRequest, "error", data)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	data := gin.H{"is_uploaded": true}
+	response := helper.APIResponse("Campaign image successfuly uploaded", http.StatusOK, "success", data)
+	c.JSON(http.StatusOK, response)
+}
