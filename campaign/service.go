@@ -116,10 +116,10 @@ func (s *service) SaveCampaignImage(input CreateCampaignImageInput, fileLocation
 		return CampaignImage{}, errors.New("Not an owner of the campaign")
 	}
 	// Membuat definisi awal isPrimary = 0/false
-	isPrimary := 1
+	isPrimary := 0
 	// Jika saat user klik/input maka nilainya true
 	if input.IsPrimary {
-		isPrimary = 0
+		isPrimary = 1
 	}
 	// Pengecekan is_primary nya true
 	if input.IsPrimary {
