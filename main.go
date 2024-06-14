@@ -56,6 +56,8 @@ func main() {
 	campaignRepository := campaign.NewRepository(db)
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
+	//transactionRepository := transaction.Repository
+
 	authService := auth.NewService()
 
 	// MANUAL input Campaign baru (CreateCampaign API)
