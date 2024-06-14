@@ -105,11 +105,21 @@ func (s *service) UpdateCampaign(inputID GetCampaignDetailInput, inputData Creat
 
 // UPLOAD Implementasi interface UPLOAD Campaign Image API
 func (s *service) SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error) {
+	// Impelentasi Autorization Middleware
+	campaign, err := s.repository.FindByID(input.CampaignID)
+	if err != nil {
+		return CampaignImage{}, err
+	}
+	if campaign.UserID != input.User.ID {
+		// UserID itu yang punya data/campaign , User.ID user yang punya request untuk update data/campaign
+		// jika == maka allow, jika != maka muncul error.New di bawah ini
+		return CampaignImage{}, errors.New("Not an owner of the campaign")
+	}
 	// Membuat definisi awal isPrimary = 0/false
-	isPrimary := 0
-	// Jika saat user klik/input maka nilai nya true
+	isPrimary := 1
+	// Jika saat user klik/input maka nilainya true
 	if input.IsPrimary {
-		isPrimary = 1
+		isPrimary = 0
 	}
 	// Pengecekan is_primary nya true
 	if input.IsPrimary {

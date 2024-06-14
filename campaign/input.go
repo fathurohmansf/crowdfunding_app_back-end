@@ -19,8 +19,8 @@ type CreateCampaignInput struct {
 
 // Membuat struct baru untuk UPDATE is_primary menjadi 0 dari 1 (untuk kebutuhan service.go)
 type CreateCampaignImageInput struct {
-	// pake form karna user tidak dalam bentuk json kaya di atas
-	CampaignID int `form:"campaign_id" binding:"required"`
-	// TANYA kenapa is_primary nya tidak pakai " di setalah form
-	IsPrimary bool `form:is_primary" binding:"required"`
+	// pakai form karena user tidak dalam bentuk json seperti di atas
+	CampaignID int  `form:"campaign_id" binding:"required"`
+	IsPrimary  bool `form:"is_primary" binding:"required"`
+	User       user.User
 }
