@@ -5,6 +5,7 @@ import (
 	"crowdfunding/campaign"
 	"crowdfunding/handler"
 	"crowdfunding/helper"
+	"crowdfunding/transaction"
 	"crowdfunding/user"
 	"log"
 	"net/http"
@@ -51,14 +52,19 @@ func main() {
 		// router.GET("/handler", handler)
 		// router.Run()
 	}
+
+	// REPOSITORY
 	userRepository := user.NewRepository(db)
 	// tambahkan campaigns API ke db
 	campaignRepository := campaign.NewRepository(db)
+	transactionRepository := transaction.NewRepository(db)
+
+	// SERVICE
+	authService := auth.NewService()
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
-	//transactionRepository := transaction.Repository
-
-	authService := auth.NewService()
+	// Panggil Transaction Service
+	transactionService := transaction.NewService(transactionRepository)
 
 	// MANUAL input Campaign baru (CreateCampaign API)
 	// input := campaign.CreateCampaignInput{}
@@ -144,7 +150,9 @@ func main() {
 	// HANDLER
 	userHandler := handler.NewUserHandler(userService, authService) // tambahkan authService
 	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
+	transactionHandler := handler.NewTransactionHandler(transactionService)
 
+	// ROUTE
 	router := gin.Default()
 	// membuat static images supaya bisa di akses routing folder nya langsung di browser
 	// cth = http://localhost:8080/images/16-Green%20Ui%20Design%20Letter%20U%20Logo.png
@@ -164,6 +172,8 @@ func main() {
 	api.PUT("/campaigns/:id", authMiddleware(authService, userService), campaignHandler.UpdateCampaign) //Middleware karna mau upload itu harus login user dulu ga sembarangan upload
 	// route untuk UPLOAD Campaign Image API
 	api.POST("/campaign-images", authMiddleware(authService, userService), campaignHandler.UploadImage) //Middleware karna mau upload itu harus login user dulu ga sembarangan upload
+	// route untuk Campaign Transaction API
+	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetCampaignTransaction)
 
 	router.Run()
 }
