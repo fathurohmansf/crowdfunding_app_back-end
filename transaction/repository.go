@@ -34,6 +34,7 @@ func (r *repository) GetByCampaignID(campaignID int) ([]Transaction, error) {
 func (r *repository) GetByUserID(userID int) ([]Transaction, error) {
 	var transactions []Transaction
 	// jadi kita men load Campaign yang mempunyai relasi ke campaign images tapi hanya bisa akses/tampil yg is_primary=1
+	// karna di transaction tidak punya relasi ke campaign_images
 	// baru kita cari userID dan Cari Transaksi berdasarkan dataID
 	err := r.db.Preload("Campaign.CampaignImages", "campaign_images.is_primary = 1").Where("user_id = ?", userID).Find(&transactions).Error
 	if err != nil {
