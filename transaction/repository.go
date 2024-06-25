@@ -8,6 +8,8 @@ type repository struct {
 
 type Repository interface {
 	GetByCampaignID(campaignID int) ([]Transaction, error)
+	// Get userID
+	GetByUserID(userID int) ([]Transaction, error)
 }
 
 func NewRepository(db *gorm.DB) *repository {
@@ -26,4 +28,16 @@ func (r *repository) GetByCampaignID(campaignID int) ([]Transaction, error) {
 		return transaction, err
 	}
 	return transaction, nil
+}
+
+// User Transaction API
+func (r *repository) GetByUserID(userID int) ([]Transaction, error) {
+	var transactions []Transaction
+	// jadi kita men load Campaign yang mempunyai relasi ke campaign images tapi hanya bisa akses/tampil yg is_primary=1
+	// baru kita cari userID dan Cari Transaksi berdasarkan dataID
+	err := r.db.Preload("Campaign.CampaignImages", "campaign_images.is_primary = 1").Where("user_id = ?", userID).Find(&transactions).Error
+	if err != nil {
+		return transactions, err
+	}
+	return transactions, nil
 }

@@ -22,15 +22,18 @@ func NewService(repository Repository, campaignRepository campaign.Repository) *
 func (s *service) GetTransactionByCampaignID(input GetCampaignTransactionInput) ([]Transaction, error) {
 
 	// Menerapkan Authorization (agar user lain tidak bisa liat data transaksi campaign sendiri)
-	// 1. Get Campaign
+	// 1. Get Campaign dari Repo
 	// 2. Check campaign.user.id != user_id yang melakukan request
 	campaign, err := s.campaignRepository.FindByID(input.ID)
+	// jika ada error maka list kosong
 	if err != nil {
 		return []Transaction{}, err
 	}
+	// jika ada error namun ID user salah maka tampilkan bukan user pembuat campaign
 	if campaign.UserID != input.User.ID {
-		return []Transaction{}, errors.New("Not an owner of the campaign")
+		return []Transaction{}, errors.New(" Not an owner of the campaign")
 	}
+	// jika benar maka akan return transaction nya
 	transaction, err := s.repository.GetByCampaignID(input.ID)
 	if err != nil {
 		return transaction, err
