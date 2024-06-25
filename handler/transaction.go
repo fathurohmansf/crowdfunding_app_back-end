@@ -3,6 +3,7 @@ package handler
 import (
 	"crowdfunding/helper"
 	"crowdfunding/transaction"
+	"crowdfunding/user"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,11 @@ func (h *transactionHandler) GetCampaignTransaction(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
+
+	// JWT
+	currentUser := c.MustGet("currentUser").(user.User)
+	input.User = currentUser
+
 	transactions, err := h.service.GetTransactionByCampaignID(input)
 	if err != nil {
 		response := helper.APIResponse("Failed to get campaign's transactions", http.StatusBadRequest, "error", nil)

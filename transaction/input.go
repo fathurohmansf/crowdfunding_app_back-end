@@ -4,7 +4,8 @@ import "crowdfunding/user"
 
 type GetCampaignTransactionInput struct {
 	// pakai uri
-	ID int `uri:"id" binding:"required"`
+	ID   int `uri:"id" binding:"required"`
+	User user.User
 }
 
 // Membaut struct baru untuk Create Campaign API Sevice.go

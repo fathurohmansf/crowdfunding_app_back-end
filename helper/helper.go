@@ -6,7 +6,7 @@ import "github.com/go-playground/validator/v10"
 type Response struct {
 
 	// ini punya meta yg merupakan type data nya meta
-	Meta Meta `json:"meta`
+	Meta Meta `json:"meta"`
 	// punya data yang type nya adalah interface kenapa interface karna
 	// isi data nya bisa bebas, berupa json,int,list string dll.
 	Data interface{} `json:"data"`
