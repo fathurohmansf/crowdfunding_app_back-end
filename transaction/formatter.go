@@ -9,6 +9,19 @@ type CampaignTransactionFormatter struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+// Formatter untuk User Transaction API
+type UserTransactionFormatter struct {
+	ID        int               `json:"id"`
+	Amount    int               `json:"amount"`
+	Status    string            `json:"status"`
+	CreatedAt time.Time         `json:"created_at"`
+	Campaign  CampaignFormatter `json:"campaign"`
+}
+type CampaignFormatter struct {
+	Name     string `json:"name"`
+	ImageURL string `json:"image_url"`
+}
+
 // fungsi ini untuk format 1 (one) Transaction Campaign
 func FormatCampaignTransaction(transaction Transaction) CampaignTransactionFormatter {
 	formatter := CampaignTransactionFormatter{}
@@ -29,6 +42,39 @@ func FormatCampaignTransactions(transaction []Transaction) []CampaignTransaction
 	var transactionsFormatter []CampaignTransactionFormatter
 	for _, transaction := range transaction {
 		formatter := FormatCampaignTransaction(transaction)
+		transactionsFormatter = append(transactionsFormatter, formatter)
+	}
+	return transactionsFormatter
+}
+
+// Fungsi untuk User Transaction API
+func FormatUserTransaction(transaction Transaction) UserTransactionFormatter {
+	formatter := UserTransactionFormatter{}
+	formatter.ID = transaction.ID
+	formatter.Amount = transaction.Amount
+	formatter.Status = transaction.Status
+	formatter.CreatedAt = transaction.CreatedAt
+
+	campaignFormatter := CampaignFormatter{}
+	campaignFormatter.Name = transaction.Campaign.Name
+	campaignFormatter.ImageURL = ""
+	if len(transaction.Campaign.CampaignImages) > 0 {
+		campaignFormatter.ImageURL = transaction.Campaign.CampaignImages[0].FileName
+	}
+	formatter.Campaign = campaignFormatter
+	return formatter
+}
+
+// fungsi ini untuk format List Of User Transaction API
+func FormatUserTransactions(transaction []Transaction) []UserTransactionFormatter {
+	// jika nilai transaksi 0 maka balikkan array kosong {}
+	if len(transaction) == 0 {
+		return []UserTransactionFormatter{}
+	}
+	// jika nilai ada, akan melooping data transaction
+	var transactionsFormatter []UserTransactionFormatter
+	for _, transaction := range transaction {
+		formatter := FormatUserTransaction(transaction)
 		transactionsFormatter = append(transactionsFormatter, formatter)
 	}
 	return transactionsFormatter
