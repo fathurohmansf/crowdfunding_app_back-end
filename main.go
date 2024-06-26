@@ -174,6 +174,8 @@ func main() {
 	api.POST("/campaign-images", authMiddleware(authService, userService), campaignHandler.UploadImage) //Middleware karna mau upload itu harus login user dulu ga sembarangan upload
 	// route untuk Campaign Transaction API
 	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetCampaignTransaction)
+	// route untuk User Transaction API
+	api.GET("/transactions", authMiddleware(authService, userService), transactionHandler.GetUserTranactions)
 
 	router.Run()
 }
