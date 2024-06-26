@@ -14,7 +14,7 @@ type service struct {
 type Service interface {
 	GetTransactionByCampaignID(input GetCampaignTransactionInput) ([]Transaction, error)
 	// Membuat kontrak untuk User Transaction API
-	GetTransactionByID(userID int) ([]Transaction, error)
+	GetTransactionByUserID(userID int) ([]Transaction, error)
 }
 
 func NewService(repository Repository, campaignRepository campaign.Repository) *service {
