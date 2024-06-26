@@ -63,7 +63,7 @@ func main() {
 	authService := auth.NewService()
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
-	// Panggil Transaction Service , panggil juga campaignrepository untuk auth
+	// Panggil Transaction Service , panggil juga campaignrepository
 	transactionService := transaction.NewService(transactionRepository, campaignRepository)
 
 	// MANUAL input Campaign baru (CreateCampaign API)
