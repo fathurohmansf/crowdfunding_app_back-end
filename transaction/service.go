@@ -45,6 +45,7 @@ func (s *service) GetTransactionByCampaignID(input GetCampaignTransactionInput) 
 
 // Function untuk User Transaction API
 func (s *service) GetTransactionByUserID(userID int) ([]Transaction, error) {
+	// panggil repo/data userID
 	transaction, err := s.repository.GetByUserID(userID)
 	if err != nil {
 		return transaction, err
