@@ -18,6 +18,13 @@ type CreateCampaignInput struct {
 	User             user.User
 }
 
+// Membuat Struct untuk Membuat transaksi MidTrans
+type CreateTransactionInput struct {
+	Amount     int `json:"amount" binding:"required"`
+	CampaignID int `json:"campaign_id" binding:"required"`
+	User       user.User
+}
+
 // Membuat struct baru untuk UPDATE is_primary menjadi 0 dari 1 (untuk kebutuhan service.go)
 type CreateCampaignImageInput struct {
 	// pakai form karena user tidak dalam bentuk json seperti di atas

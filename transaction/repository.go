@@ -10,6 +10,8 @@ type Repository interface {
 	GetByCampaignID(campaignID int) ([]Transaction, error)
 	// Get userID
 	GetByUserID(userID int) ([]Transaction, error)
+	// Midtrans
+	Save(transaction Transaction) (Transaction, error)
 }
 
 func NewRepository(db *gorm.DB) *repository {
@@ -41,4 +43,13 @@ func (r *repository) GetByUserID(userID int) ([]Transaction, error) {
 		return transactions, err
 	}
 	return transactions, nil
+}
+
+// Membuat fungsi Midtrans payment
+func (r *repository) Save(transaction Transaction) (Transaction, error) {
+	err := r.db.Create(&transaction).Error
+	if err != nil {
+		return transaction, err
+	}
+	return transaction, nil
 }

@@ -67,3 +67,9 @@ func (h *transactionHandler) GetUserTranactions(c *gin.Context) {
 	response := helper.APIResponse("User's transactions", http.StatusOK, "success", transaction.FormatUserTransactions(trasactions))
 	c.JSON(http.StatusOK, response)
 }
+
+// MIDTRANS Handler
+// Ada input dari user
+// handler tangkap input terus di-mapping ke input struct
+// panggil service buat transaksi (service.go,input.go),memanggil sistem midtrans (snapGateway.GetToken), lalu di record ke database
+// panggil repo create new transaction data (repository.go)

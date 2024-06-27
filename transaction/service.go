@@ -15,6 +15,8 @@ type Service interface {
 	GetTransactionByCampaignID(input GetCampaignTransactionInput) ([]Transaction, error)
 	// Membuat kontrak untuk User Transaction API
 	GetTransactionByUserID(userID int) ([]Transaction, error)
+	// Membuat kontrak untuk Create Transaction MidTrans
+	CreateTransaction(input CreateTransactionInput) (Transaction, error)
 }
 
 func NewService(repository Repository, campaignRepository campaign.Repository) *service {
@@ -51,4 +53,20 @@ func (s *service) GetTransactionByUserID(userID int) ([]Transaction, error) {
 		return transaction, err
 	}
 	return transaction, nil
+}
+
+// implementasi func Create Transaksi Midtrans
+func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, error) {
+	transaction := Transaction{}
+	transaction.CampaignID = input.CampaignID
+	transaction.Amount = input.Amount
+	transaction.UserID = transaction.User.ID
+	transaction.Status = "panding"
+	transaction.Code = "ORDER-001"
+
+	newTranscation, err := s.repository.Save(transaction)
+	if err != nil {
+		return newTranscation, err
+	}
+	return newTranscation, nil
 }
