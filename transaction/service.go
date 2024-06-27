@@ -55,12 +55,12 @@ func (s *service) GetTransactionByUserID(userID int) ([]Transaction, error) {
 	return transaction, nil
 }
 
-// implementasi func Create Transaksi Midtrans
+// implementasi func Create Transaksi via Midtrans
 func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, error) {
 	transaction := Transaction{}
 	transaction.CampaignID = input.CampaignID
 	transaction.Amount = input.Amount
-	transaction.UserID = transaction.User.ID
+	transaction.UserID = input.User.ID
 	transaction.Status = "panding"
 	transaction.Code = "ORDER-001"
 
