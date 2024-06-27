@@ -33,14 +33,14 @@ func FormatCampaignTransaction(transaction Transaction) CampaignTransactionForma
 }
 
 // fungsi ini untuk format List Of Transaction
-func FormatCampaignTransactions(transaction []Transaction) []CampaignTransactionFormatter {
+func FormatCampaignTransactions(transactions []Transaction) []CampaignTransactionFormatter {
 	// jika nilai transaksi 0 maka balikkan array kosong {}
-	if len(transaction) == 0 {
+	if len(transactions) == 0 {
 		return []CampaignTransactionFormatter{}
 	}
 	// jika nilai ada, akan melooping data transaction
 	var transactionsFormatter []CampaignTransactionFormatter
-	for _, transaction := range transaction {
+	for _, transaction := range transactions {
 		formatter := FormatCampaignTransaction(transaction)
 		transactionsFormatter = append(transactionsFormatter, formatter)
 	}
@@ -58,6 +58,7 @@ func FormatUserTransaction(transaction Transaction) UserTransactionFormatter {
 	campaignFormatter := CampaignFormatter{}
 	campaignFormatter.Name = transaction.Campaign.Name
 	campaignFormatter.ImageURL = ""
+	// Ambil nilai yg lebih dari 0 , yaitu 1
 	if len(transaction.Campaign.CampaignImages) > 0 {
 		campaignFormatter.ImageURL = transaction.Campaign.CampaignImages[0].FileName
 	}
@@ -66,14 +67,14 @@ func FormatUserTransaction(transaction Transaction) UserTransactionFormatter {
 }
 
 // fungsi ini untuk format List Of User Transaction API
-func FormatUserTransactions(transaction []Transaction) []UserTransactionFormatter {
+func FormatUserTransactions(transactions []Transaction) []UserTransactionFormatter {
 	// jika nilai transaksi 0 maka balikkan array kosong {}
-	if len(transaction) == 0 {
+	if len(transactions) == 0 {
 		return []UserTransactionFormatter{}
 	}
 	// jika nilai ada, akan melooping data transaction
 	var transactionsFormatter []UserTransactionFormatter
-	for _, transaction := range transaction {
+	for _, transaction := range transactions {
 		formatter := FormatUserTransaction(transaction)
 		transactionsFormatter = append(transactionsFormatter, formatter)
 	}
