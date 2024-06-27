@@ -4,7 +4,6 @@ import "github.com/go-playground/validator/v10"
 
 // Membuat struck response untuk ke front end
 type Response struct {
-
 	// ini punya meta yg merupakan type data nya meta
 	Meta Meta `json:"meta"`
 	// punya data yang type nya adalah interface kenapa interface karna

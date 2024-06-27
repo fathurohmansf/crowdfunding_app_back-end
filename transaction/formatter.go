@@ -78,5 +78,6 @@ func FormatUserTransactions(transactions []Transaction) []UserTransactionFormatt
 		formatter := FormatUserTransaction(transaction)
 		transactionsFormatter = append(transactionsFormatter, formatter)
 	}
+	// kembalikan nilai nya
 	return transactionsFormatter
 }
