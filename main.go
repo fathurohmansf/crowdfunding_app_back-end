@@ -184,6 +184,8 @@ func main() {
 	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetCampaignTransaction)
 	// route untuk User Transaction API
 	api.GET("/transactions", authMiddleware(authService, userService), transactionHandler.GetUserTranactions)
+	// route untuk Create Transaction Midtrans
+	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
 
 	router.Run()
 }

@@ -70,7 +70,7 @@ func (h *transactionHandler) GetUserTranactions(c *gin.Context) {
 
 // MIDTRANS Handler
 // Ada input dari user
-// handler tangkap input terus di-mapping ke input struct
+// handler tangkap input terus di-mapping ke input struct (transaction.go)
 // panggil service buat transaksi (service.go,input.go),memanggil sistem midtrans (snapGateway.GetToken), lalu di record ke database
 // panggil repo create new transaction data (repository.go)
 func (h *transactionHandler) CreateTransaction(c *gin.Context) {
