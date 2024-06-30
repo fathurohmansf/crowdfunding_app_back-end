@@ -2,6 +2,7 @@ package transaction
 
 import (
 	"crowdfunding/campaign"
+	"crowdfunding/payment"
 	"errors"
 )
 
@@ -9,6 +10,8 @@ type service struct {
 	repository Repository
 	// untuk menambahkan campaign Repo untuk kebutuhan Authorization
 	campaignRepository campaign.Repository
+	// untuk menambahkan service paymentURL midtrans
+	paymentService payment.Service
 }
 
 type Service interface {
@@ -19,8 +22,8 @@ type Service interface {
 	CreateTransaction(input CreateTransactionInput) (Transaction, error)
 }
 
-func NewService(repository Repository, campaignRepository campaign.Repository) *service {
-	return &service{repository, campaignRepository}
+func NewService(repository Repository, campaignRepository campaign.Repository, paymentService payment.Service) *service {
+	return &service{repository, campaignRepository, paymentService}
 }
 
 func (s *service) GetTransactionByCampaignID(input GetCampaignTransactionInput) ([]Transaction, error) {

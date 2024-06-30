@@ -5,6 +5,7 @@ import (
 	"crowdfunding/campaign"
 	"crowdfunding/handler"
 	"crowdfunding/helper"
+	"crowdfunding/payment"
 	"crowdfunding/transaction"
 	"crowdfunding/user"
 	"log"
@@ -63,8 +64,10 @@ func main() {
 	authService := auth.NewService()
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
+	// Panggil payment Midtrans service
+	paymentService := payment.NewService()
 	// Panggil Transaction Service , panggil juga campaignrepository
-	transactionService := transaction.NewService(transactionRepository, campaignRepository)
+	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 	// MANUAL Panggil Create Transaction Service MidTrans
 	// user, _ := userService.GetUserByID(9)
 	// input := transaction.CreateTransactionInput{
