@@ -65,14 +65,14 @@ func main() {
 	campaignService := campaign.NewService(campaignRepository)
 	// Panggil Transaction Service , panggil juga campaignrepository
 	transactionService := transaction.NewService(transactionRepository, campaignRepository)
-	// Panggil Create Transaction Service MidTrans
-	user, _ := userService.GetUserByID(9)
-	input := transaction.CreateTransactionInput{
-		CampaignID: 9,
-		Amount:     200000,
-		User:       user,
-	}
-	transactionService.CreateTransaction(input)
+	// MANUAL Panggil Create Transaction Service MidTrans
+	// user, _ := userService.GetUserByID(9)
+	// input := transaction.CreateTransactionInput{
+	// 	CampaignID: 9,
+	// 	Amount:     200000,
+	// 	User:       user,
+	// }
+	// transactionService.CreateTransaction(input)
 
 	// MANUAL input Campaign baru (CreateCampaign API)
 	// input := campaign.CreateCampaignInput{}
