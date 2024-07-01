@@ -71,5 +71,20 @@ func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, 
 	if err != nil {
 		return newTranscation, err
 	}
+
+	paymentTransaction := payment.Transaction{
+		ID:     newTranscation.ID,
+		Amount: newTranscation.Amount,
+	}
+
+	paymentURL, err := s.paymentService.GetPaymentURL(paymentTransaction, input.User)
+	if err != nil {
+		return newTranscation, err
+	}
+	newTranscation.PaymentURL = paymentURL
+	newTranscation, err = s.repository.Update(transaction)
+	if err != nil {
+		return newTranscation, err
+	}
 	return newTranscation, nil
 }
