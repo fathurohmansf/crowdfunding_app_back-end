@@ -22,6 +22,17 @@ type CampaignFormatter struct {
 	ImageURL string `json:"image_url"`
 }
 
+// struct ini untuk Format Create Transaction di Midtrans menggunakan POST (create)
+type TransactionFormatter struct {
+	ID         int    `json:"id"`
+	CampaignID int    `json:"campaign_id"`
+	UserID     int    `json:"user_id"`
+	Amount     int    `json:"amount"`
+	Status     string `json:"status"`
+	Code       string `json:"code"`
+	PaymentURL string `json:"payment_url"`
+}
+
 // fungsi ini untuk format 1 (one) Transaction Campaign
 func FormatCampaignTransaction(transaction Transaction) CampaignTransactionFormatter {
 	formatter := CampaignTransactionFormatter{}
@@ -80,4 +91,17 @@ func FormatUserTransactions(transactions []Transaction) []UserTransactionFormatt
 	}
 	// kembalikan nilai nya
 	return transactionsFormatter
+}
+
+// fungsi ini untuk format 1 (one) Create Transaction pakai Midtrans
+func FormatTransaction(transaction Transaction) TransactionFormatter {
+	formatter := TransactionFormatter{}
+	formatter.ID = transaction.ID
+	formatter.CampaignID = transaction.CampaignID
+	formatter.UserID = transaction.UserID
+	formatter.Amount = transaction.Amount
+	formatter.Status = transaction.Status
+	formatter.Code = transaction.Code
+	formatter.PaymentURL = transaction.PaymentURL
+	return formatter
 }

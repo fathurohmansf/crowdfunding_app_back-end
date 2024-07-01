@@ -97,6 +97,6 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
-	response := helper.APIResponse("Success to create transaction", http.StatusOK, "success", NewTransaction)
+	response := helper.APIResponse("Success to create transaction", http.StatusOK, "success", transaction.FormatTransaction(NewTransaction))
 	c.JSON(http.StatusOK, response)
 }
