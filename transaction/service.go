@@ -82,7 +82,7 @@ func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, 
 		return newTranscation, err
 	}
 	newTranscation.PaymentURL = paymentURL
-	newTranscation, err = s.repository.Update(transaction)
+	newTranscation, err = s.repository.Update(newTranscation)
 	if err != nil {
 		return newTranscation, err
 	}
