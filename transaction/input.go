@@ -33,3 +33,11 @@ type CreateCampaignImageInput struct {
 	IsPrimary bool `form:"is_primary"`
 	User      user.User
 }
+
+// Create Transaction pakai Midtrans untuk Finish payment/payment notification
+type TransactionNotificationInput struct {
+	TransactionStatus string `json:"transaction_status"`
+	OrderID           string `json:"order_id"`
+	PaymentType       string `json:"payment_type"`
+	FraudStatus       string `json:"fraud_status"`
+}
