@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -165,6 +166,8 @@ func main() {
 
 	// ROUTE
 	router := gin.Default()
+	// CoRS for client
+	router.Use(cors.Default())
 	// membuat static images supaya bisa di akses routing folder nya langsung di browser
 	// cth = http://localhost:8080/images/16-Green%20Ui%20Design%20Letter%20U%20Logo.png
 	router.Static("/images", "./images")
