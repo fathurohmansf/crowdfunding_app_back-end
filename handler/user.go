@@ -210,3 +210,11 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 	response := helper.APIResponse("Avatar successfuly uploaded", http.StatusOK, "success", data)
 	c.JSON(http.StatusOK, response)
 }
+
+// Fungsi untuk ambil data user login, Fetch User API / Fetch User Endpoint
+func (h *userHandler) FetchUser(c *gin.Context) {
+	currentUser := c.MustGet("currentUser").(user.User)
+	formatter := user.FormatUser(currentUser, "")
+	response := helper.APIResponse("Successfuly fetch user data", http.StatusOK, "succes", formatter)
+	c.JSON(http.StatusOK, response)
+}

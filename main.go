@@ -177,6 +177,9 @@ func main() {
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar) //Middleware karna mau upload itu harus login user dulu ga sembarangan upload
+	// Fetch User API
+	api.GET("/users/fetch", authMiddleware(authService, userService), userHandler.FetchUser)
+
 	// Ambil data campaigns get dari server
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
 	api.GET("/campaigns/:id", campaignHandler.GetCampaign)
