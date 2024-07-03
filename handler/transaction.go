@@ -2,6 +2,7 @@ package handler
 
 import (
 	"crowdfunding/helper"
+	"crowdfunding/payment"
 	"crowdfunding/transaction"
 	"crowdfunding/user"
 	"net/http"
@@ -17,11 +18,12 @@ import (
 // repo mencari data transaction suatu campaign
 
 type transactionHandler struct {
-	service transaction.Service
+	service        transaction.Service
+	paymentService payment.Service
 }
 
-func NewTransactionHandler(service transaction.Service) *transactionHandler {
-	return &transactionHandler{service}
+func NewTransactionHandler(service transaction.Service, paymentService payment.Service) *transactionHandler {
+	return &transactionHandler{service, paymentService}
 }
 
 func (h *transactionHandler) GetCampaignTransaction(c *gin.Context) {
@@ -99,4 +101,24 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 	}
 	response := helper.APIResponse("Success to create transaction", http.StatusOK, "success", transaction.FormatTransaction(NewTransaction))
 	c.JSON(http.StatusOK, response)
+}
+
+// Fungsi untuk Notification Transaction Midtrans
+func (h *transactionHandler) GetNotification(c *gin.Context) {
+	var input transaction.TransactionNotificationInput
+	err := c.ShouldBindJSON(&input)
+
+	if err != nil {
+		response := helper.APIResponse("Failed to process notification", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	err = h.paymentService.ProcessPayment(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to process notification", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	c.JSON(http.StatusOK, input)
 }

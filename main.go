@@ -65,7 +65,7 @@ func main() {
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
 	// Panggil payment Midtrans service
-	paymentService := payment.NewService()
+	paymentService := payment.NewService(transactionRepository, campaignRepository)
 	// Panggil Transaction Service , panggil juga campaignrepository
 	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 	// MANUAL Panggil Create Transaction Service MidTrans
@@ -161,7 +161,7 @@ func main() {
 	// HANDLER
 	userHandler := handler.NewUserHandler(userService, authService) // tambahkan authService
 	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
-	transactionHandler := handler.NewTransactionHandler(transactionService)
+	transactionHandler := handler.NewTransactionHandler(transactionService, paymentService)
 
 	// ROUTE
 	router := gin.Default()
@@ -189,6 +189,8 @@ func main() {
 	api.GET("/transactions", authMiddleware(authService, userService), transactionHandler.GetUserTranactions)
 	// route untuk Create Transaction Midtrans
 	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
+	// route untuk Transaction Notification Midtrans
+	api.POST("/transactions/notification", transactionHandler.GetNotification)
 
 	router.Run()
 }
