@@ -4,6 +4,7 @@ import (
 	"crowdfunding/campaign"
 	"crowdfunding/payment"
 	"errors"
+	"strconv"
 )
 
 type service struct {
@@ -20,6 +21,8 @@ type Service interface {
 	GetTransactionByUserID(userID int) ([]Transaction, error)
 	// Membuat kontrak untuk Create Transaction MidTrans
 	CreateTransaction(input CreateTransactionInput) (Transaction, error)
+	// Membuat kontrak untuk TransactionNotification Midtrans
+	ProcessPayment(input TransactionNotificationInput) error
 }
 
 func NewService(repository Repository, campaignRepository campaign.Repository, paymentService payment.Service) *service {
@@ -87,4 +90,41 @@ func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, 
 		return newTranscation, err
 	}
 	return newTranscation, nil
+}
+
+// Membuat fungsi Proses Payment Transaction Notification Midtrans
+func (s *service) ProcessPayment(input TransactionNotificationInput) error {
+	transaction_id, _ := strconv.Atoi(input.OrderID)
+
+	transaction, err := s.repository.GetByID(transaction_id)
+	if err != nil {
+		return err
+	}
+	if input.PaymentType == "credit_card" && input.TransactionStatus == "capture" && input.FraudStatus == "accept" {
+		transaction.Status = "paid"
+	} else if input.TransactionStatus == "sattlement" {
+		transaction.Status = "paid"
+	} else if input.TransactionStatus == "deny" || input.TransactionStatus == "expire" || input.TransactionStatus == "cancel" {
+		transaction.Status = "cancelled"
+	}
+
+	updatedTransaction, err := s.repository.Update(transaction)
+	if err != nil {
+		return err
+	}
+
+	campaign, err := s.campaignRepository.FindByID(updatedTransaction.CampaignID)
+	if err != nil {
+		return err
+	}
+	if updatedTransaction.Status == "paid" {
+		campaign.BackerCount = campaign.BackerCount + 1
+		campaign.CurrentAmount = campaign.CurrentAmount + updatedTransaction.Amount
+
+		_, err := s.campaignRepository.Update(campaign)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

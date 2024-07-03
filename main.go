@@ -65,7 +65,7 @@ func main() {
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
 	// Panggil payment Midtrans service
-	paymentService := payment.NewService(transactionRepository, campaignRepository)
+	paymentService := payment.NewService()
 	// Panggil Transaction Service , panggil juga campaignrepository
 	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 	// MANUAL Panggil Create Transaction Service MidTrans
@@ -161,7 +161,7 @@ func main() {
 	// HANDLER
 	userHandler := handler.NewUserHandler(userService, authService) // tambahkan authService
 	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
-	transactionHandler := handler.NewTransactionHandler(transactionService, paymentService)
+	transactionHandler := handler.NewTransactionHandler(transactionService)
 
 	// ROUTE
 	router := gin.Default()
