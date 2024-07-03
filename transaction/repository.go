@@ -14,6 +14,8 @@ type Repository interface {
 	Save(transaction Transaction) (Transaction, error)
 	// Update sebuah transaksi user di Midtrans
 	Update(transaction Transaction) (Transaction, error)
+	// Untuk Mengambil data dari TransactionID for Midtrans
+	GetByID(ID int) (Transaction, error)
 }
 
 func NewRepository(db *gorm.DB) *repository {
@@ -59,6 +61,16 @@ func (r *repository) Save(transaction Transaction) (Transaction, error) {
 // Untuk update user Transaksi di Midtrans
 func (r *repository) Update(transaction Transaction) (Transaction, error) {
 	err := r.db.Save(&transaction).Error
+	if err != nil {
+		return transaction, err
+	}
+	return transaction, nil
+}
+
+// TransactionID untuk Midtrans
+func (r *repository) GetByID(ID int) (Transaction, error) {
+	var transaction Transaction
+	err := r.db.Where("id = ?", ID).Find(&transaction).Error // .Preload("User")
 	if err != nil {
 		return transaction, err
 	}
