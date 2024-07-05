@@ -261,7 +261,7 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 
 }
 
-// Cara manual RegisterUserInput karna sudah di buat auto oleh handler
+// MANUAL cara RegisterUserInput karna sudah di buat auto oleh handler
 // userInput := user.RegisterUserInput{}
 // userInput.Name = " Test simpan dari service"
 // userInput.Email = "contoh@gmail.com"
