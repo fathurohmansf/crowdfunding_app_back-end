@@ -9,13 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Penerapan Transaction API
-// Parameter di uri
-// tangkap parameter mapping ke input struct
-// panggil service, input struct sebagai parameter
-// service, berbekal campaign id bisa panggil repo
-// repo mencari data transaction suatu campaign
-
 type transactionHandler struct {
 	service transaction.Service
 }
@@ -34,7 +27,7 @@ func (h *transactionHandler) GetCampaignTransaction(c *gin.Context) {
 		return
 	}
 
-	// JWT
+	//JWT Call
 	currentUser := c.MustGet("currentUser").(user.User)
 	input.User = currentUser
 
@@ -48,12 +41,6 @@ func (h *transactionHandler) GetCampaignTransaction(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// USER TRANSACTION API
-// Get USER TRANSACTION
-// Handler
-// Ambil nilai user dari jwt/midlleware
-// service
-// repo => ambil data transaction (preload data campaign)
 func (h *transactionHandler) GetUserTranactions(c *gin.Context) {
 	currentUser := c.MustGet("currentUser").(user.User)
 	userID := currentUser.ID
@@ -68,18 +55,13 @@ func (h *transactionHandler) GetUserTranactions(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// MIDTRANS Handler
-// Ada input dari user
-// handler tangkap input terus di-mapping ke input struct (transaction.go)
-// panggil service buat transaksi (service.go,input.go),memanggil sistem midtrans (snapGateway.GetToken), lalu di record ke database
-// panggil repo create new transaction data (repository.go)
 func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 	var input transaction.CreateTransactionInput
 
 	err := c.ShouldBindJSON(&input)
 
 	if err != nil {
-		// ambil format error dari FormatError
+
 		errors := helper.FormatValidationError(err)
 		errorMessage := gin.H{"errors": errors}
 
@@ -87,7 +69,7 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
-	// ambil data user dari JWT
+
 	currentUser := c.MustGet("currentUser").(user.User)
 	input.User = currentUser
 
@@ -101,7 +83,6 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// Fungsi untuk Notification Transaction Midtrans
 func (h *transactionHandler) GetNotification(c *gin.Context) {
 	var input transaction.TransactionNotificationInput
 	err := c.ShouldBindJSON(&input)

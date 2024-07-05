@@ -9,7 +9,6 @@ type CampaignTransactionFormatter struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-// Formatter untuk User Transaction API
 type UserTransactionFormatter struct {
 	ID        int               `json:"id"`
 	Amount    int               `json:"amount"`
@@ -22,7 +21,6 @@ type CampaignFormatter struct {
 	ImageURL string `json:"image_url"`
 }
 
-// struct ini untuk Format Create Transaction di Midtrans menggunakan POST (create)
 type TransactionFormatter struct {
 	ID         int    `json:"id"`
 	CampaignID int    `json:"campaign_id"`
@@ -33,7 +31,6 @@ type TransactionFormatter struct {
 	PaymentURL string `json:"payment_url"`
 }
 
-// fungsi ini untuk format 1 (one) Transaction Campaign
 func FormatCampaignTransaction(transaction Transaction) CampaignTransactionFormatter {
 	formatter := CampaignTransactionFormatter{}
 	formatter.ID = transaction.ID
@@ -43,13 +40,12 @@ func FormatCampaignTransaction(transaction Transaction) CampaignTransactionForma
 	return formatter
 }
 
-// fungsi ini untuk format List Of Transaction
 func FormatCampaignTransactions(transactions []Transaction) []CampaignTransactionFormatter {
-	// jika nilai transaksi 0 maka balikkan array kosong {}
+
 	if len(transactions) == 0 {
 		return []CampaignTransactionFormatter{}
 	}
-	// jika nilai ada, akan melooping data transaction
+
 	var transactionsFormatter []CampaignTransactionFormatter
 	for _, transaction := range transactions {
 		formatter := FormatCampaignTransaction(transaction)
@@ -58,7 +54,6 @@ func FormatCampaignTransactions(transactions []Transaction) []CampaignTransactio
 	return transactionsFormatter
 }
 
-// Fungsi untuk User Transaction API
 func FormatUserTransaction(transaction Transaction) UserTransactionFormatter {
 	formatter := UserTransactionFormatter{}
 	formatter.ID = transaction.ID
@@ -69,7 +64,7 @@ func FormatUserTransaction(transaction Transaction) UserTransactionFormatter {
 	campaignFormatter := CampaignFormatter{}
 	campaignFormatter.Name = transaction.Campaign.Name
 	campaignFormatter.ImageURL = ""
-	// Ambil nilai yg lebih dari 0 , yaitu 1
+
 	if len(transaction.Campaign.CampaignImages) > 0 {
 		campaignFormatter.ImageURL = transaction.Campaign.CampaignImages[0].FileName
 	}
@@ -77,23 +72,21 @@ func FormatUserTransaction(transaction Transaction) UserTransactionFormatter {
 	return formatter
 }
 
-// fungsi ini untuk format List Of User Transaction API
 func FormatUserTransactions(transactions []Transaction) []UserTransactionFormatter {
-	// jika nilai transaksi 0 maka balikkan array kosong {}
+
 	if len(transactions) == 0 {
 		return []UserTransactionFormatter{}
 	}
-	// jika nilai ada, akan melooping data transaction
+
 	var transactionsFormatter []UserTransactionFormatter
 	for _, transaction := range transactions {
 		formatter := FormatUserTransaction(transaction)
 		transactionsFormatter = append(transactionsFormatter, formatter)
 	}
-	// kembalikan nilai nya
+
 	return transactionsFormatter
 }
 
-// fungsi ini untuk format 1 (one) Create Transaction pakai Midtrans
 func FormatTransaction(transaction Transaction) TransactionFormatter {
 	formatter := TransactionFormatter{}
 	formatter.ID = transaction.ID

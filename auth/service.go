@@ -6,7 +6,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-// Membuat service baru
 type Service interface {
 	GenerateToken(userID int) (string, error)
 	// Untuk Validasi token / ttd
@@ -25,10 +24,8 @@ func NewService() *jwtService {
 	return &jwtService{}
 }
 
-// Membuat funsi jwt untuk signature di browser sesuai jwt.io
 func (s *jwtService) GenerateToken(userID int) (string, error) {
 	claim := jwt.MapClaims{}
-	// json yg akan di tampilkan key nya user_id
 	claim["user_id"] = userID
 
 	// Buat token menggunakan algoritma yg di gunakan HS256

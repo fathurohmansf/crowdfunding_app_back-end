@@ -9,8 +9,6 @@ type UserFormatter struct {
 	ImageURL   string `json:"image_url"`
 }
 
-// Membuat fungsi format aga tidak lagi response json dari struct
-// User dari entity.go, karna front-end tidak membutuhkan CreateAt dll.
 func FormatUser(user User, token string) UserFormatter {
 	formatter := UserFormatter{
 		ID:         user.ID,
