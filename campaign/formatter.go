@@ -8,7 +8,7 @@ type CampaignFormatter struct {
 	Name             string `json:"name"`
 	ShortDescription string `json:"short_description"`
 	ImageURL         string `json:"image_url"`
-	GoalAmount       int    `json:"goal_amout"`
+	GoalAmount       int    `json:"goal_amount"`
 	CurrentAmount    int    `json:"current_amount"`
 	Slug             string `json:"slug"`
 }
@@ -49,8 +49,8 @@ type CampaignDetailFormatter struct {
 	ShortDescription string   `json:"short_description"`
 	Description      string   `json:"description"`
 	ImageURL         string   `json:"image_url"`
-	GoalAmount       int      `json:"goal_amout"`
-	CurrentAmount    int      `json:"current_amout"`
+	GoalAmount       int      `json:"goal_amount"`
+	CurrentAmount    int      `json:"current_amount"`
 	BackerCount      int      `json:"backer_count"`
 	UserID           int      `json:"user_id"`
 	Slug             string   `json:"slug"`
