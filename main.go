@@ -58,6 +58,7 @@ func main() {
 	// CoRS for client
 	router.Use(cors.Default())
 	// add layout in untuk web admin
+	router.LoadHTMLGlob("web/templates/**/*")
 	router.HTMLRender = loadTemplates("./templates")
 	// Static Image
 	router.Static("/images", "./images")
