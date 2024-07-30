@@ -10,10 +10,14 @@ import (
 	"crowdfunding/user"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strings"
+
+	webHandler "crowdfunding/web/handler"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -47,11 +51,14 @@ func main() {
 	userHandler := handler.NewUserHandler(userService, authService) // tambahkan authService
 	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
 	transactionHandler := handler.NewTransactionHandler(transactionService)
+	userWebHandler := webHandler.NewUserHandler() // untuk handler web admin
 
 	// ROUTE
 	router := gin.Default()
 	// CoRS for client
 	router.Use(cors.Default())
+	// add layout in untuk web admin
+	router.HTMLRender = loadTemplates("./templates")
 	// Static Image
 	router.Static("/images", "./images")
 	api := router.Group("/api/v1")
@@ -80,8 +87,10 @@ func main() {
 	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
 	// route untuk Transaction Notification Midtrans
 	api.POST("/transactions/notification", transactionHandler.GetNotification)
+	// jika ada request ke /users maka akan di arahkan ke webhandler.index
+	router.GET("/users", userWebHandler.Index)
 
-	router.Run()
+	router.Run(":8081")
 }
 
 // Kita kerjakan Middleware(1)
@@ -126,5 +135,27 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 
 		c.Set("currentUser", user)
 	}
+}
 
+func loadTemplates(templatesDir string) multitemplate.Renderer {
+	r := multitemplate.NewRenderer()
+
+	layouts, err := filepath.Glob(templatesDir + "/layouts/*.html")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	includes, err := filepath.Glob(templatesDir + "/includes/*.html")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// Generate our templates map from our layouts/ and includes/ directories
+	for _, include := range includes {
+		layoutCopy := make([]string, len(layouts))
+		copy(layoutCopy, layouts)
+		files := append(layoutCopy, include)
+		r.AddFromFiles(filepath.Base(include), files...)
+	}
+	return r
 }
