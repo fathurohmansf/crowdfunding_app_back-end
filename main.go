@@ -57,8 +57,7 @@ func main() {
 	router := gin.Default()
 	// CoRS for client
 	router.Use(cors.Default())
-	// add layout in untuk web admin
-	router.LoadHTMLGlob("web/templates/**/*")
+	// add layoutRendering in untuk web admin
 	router.HTMLRender = loadTemplates("./web/templates")
 	// Static Image
 	router.Static("/images", "./images")
@@ -91,11 +90,12 @@ func main() {
 	// jika ada request ke /users maka akan di arahkan ke webhandler.index
 	router.GET("/users", userWebHandler.Index)
 
-	router.Run(":8081")
+	router.Run()
 }
 
 // Kita kerjakan Middleware(1)
 func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {
+
 	// Kita kerjakan Middleware (1)
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -141,12 +141,12 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 func loadTemplates(templatesDir string) multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
 
-	layouts, err := filepath.Glob(templatesDir + "/layouts/*.html")
+	layouts, err := filepath.Glob(templatesDir + "web/layouts/*")
 	if err != nil {
 		panic(err.Error())
 	}
 
-	includes, err := filepath.Glob(templatesDir + "/includes/*.html")
+	includes, err := filepath.Glob(templatesDir + "/**/*")
 	if err != nil {
 		panic(err.Error())
 	}
