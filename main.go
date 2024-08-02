@@ -51,7 +51,7 @@ func main() {
 	userHandler := handler.NewUserHandler(userService, authService) // tambahkan authService
 	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
 	transactionHandler := handler.NewTransactionHandler(transactionService)
-	userWebHandler := webHandler.NewUserHandler() // untuk handler web admin
+	userWebHandler := webHandler.NewUserHandler(userService) // untuk handler web admin
 
 	// ROUTE
 	router := gin.Default()

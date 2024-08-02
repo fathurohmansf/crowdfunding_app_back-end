@@ -2,7 +2,24 @@
 <h2 class="mb-4">List of User</h2>
 <div class="card mb-4">
     <div class="card-body">
-        This is a blank page you can use as a starting point. ini adalah halaman index
+        <table class="table mb-0">
+            <thead class="thead-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Occupation</th>
+                </tr>
+            </thead>
+        </table>
+        <tbody>
+            {{ range .users }}
+            <tr>
+                <td>{{ .Name }}</td>
+                <td>{{ .Email }}</td>
+                <td>{{ .Occupation }}</td>
+            </tr>
+            {{end}}
+        </tbody>
     </div>
 </div>
 {{ end }}
