@@ -61,6 +61,10 @@ func main() {
 	router.HTMLRender = loadTemplates("./web/templates")
 	// Static Image
 	router.Static("/images", "./images")
+	// Load Images CMS
+	router.Static("/css", "./web/assets/css")
+	router.Static("/js", "./web/assets/js")
+	router.Static("/webfonts", "./web/assets/webfonts")
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
@@ -141,7 +145,7 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 func loadTemplates(templatesDir string) multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
 
-	layouts, err := filepath.Glob(templatesDir + "web/layouts/*")
+	layouts, err := filepath.Glob(templatesDir + "/layouts/*")
 	if err != nil {
 		panic(err.Error())
 	}
