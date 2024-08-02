@@ -16,6 +16,8 @@ type Service interface {
 	SaveAvatar(ID int, fileLocation string) (User, error)
 
 	GetUserByID(ID int) (User, error)
+
+	GetAllUsers() ([]User, error)
 }
 
 type service struct {
@@ -107,4 +109,13 @@ func (s *service) GetUserByID(ID int) (User, error) {
 		return user, errors.New("No user found on with that ID")
 	}
 	return user, nil
+}
+
+// Create Service untuk Ambil data semua users di CMS admin
+func (s *service) GetAllUsers() ([]User, error) {
+	users, err := s.repository.FindAll()
+	if err != nil {
+		return users, err
+	}
+	return users, nil
 }
