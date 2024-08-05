@@ -10,16 +10,16 @@
                     <th>Occupation</th>
                 </tr>
             </thead>
+            <tbody>
+                {{ range .users }}
+                <tr>
+                    <td>{{ .Name }}</td>
+                    <td>{{ .Email }}</td>
+                    <td>{{ .Occupation }}</td>
+                </tr>
+                {{end}}
+            </tbody>
         </table>
-        <tbody>
-            {{ range .users }}
-            <tr>
-                <td>{{ .Name }}</td>
-                <td>{{ .Email }}</td>
-                <td>{{ .Occupation }}</td>
-            </tr>
-            {{end}}
-        </tbody>
     </div>
 </div>
 {{ end }}
