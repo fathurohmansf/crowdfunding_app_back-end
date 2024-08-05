@@ -93,6 +93,8 @@ func main() {
 	api.POST("/transactions/notification", transactionHandler.GetNotification)
 	// jika ada request ke /users maka akan di arahkan ke webhandler.index
 	router.GET("/users", userWebHandler.Index)
+	// route untuk newUser di CMS admin
+	router.GET("/users/new", userWebHandler.Newuser)
 
 	router.Run()
 }
