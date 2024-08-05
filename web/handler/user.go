@@ -32,6 +32,6 @@ func (h *userHandler) Index(c *gin.Context) {
 	c.HTML(http.StatusOK, "user_index.html", gin.H{"users": users}) //pakai map gin.H untuk bisa akses ke var users, dgn key(untuk template) & value(dari service)
 }
 
-func (h *userHandler) Newuser(c *gin.Context) {
+func (h *userHandler) New(c *gin.Context) {
 	c.HTML(http.StatusOK, "user_new.html", nil)
 }

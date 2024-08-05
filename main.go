@@ -94,7 +94,7 @@ func main() {
 	// jika ada request ke /users maka akan di arahkan ke webhandler.index
 	router.GET("/users", userWebHandler.Index)
 	// route untuk newUser di CMS admin
-	router.GET("/users/new", userWebHandler.Newuser)
+	router.GET("/users/new", userWebHandler.New)
 
 	router.Run()
 }
