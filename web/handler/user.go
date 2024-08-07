@@ -45,4 +45,16 @@ func (h *userHandler) Create(c *gin.Context) {
 	if err != nil {
 		// skip
 	}
+
+	RegisterInput := user.RegisterUserInput{}
+	RegisterInput.Name = input.Name
+	RegisterInput.Email = input.Email
+	RegisterInput.Occupation = input.Occupation
+	RegisterInput.Password = input.Password
+
+	_, err = h.userService.RegisterUser(RegisterInput)
+	if err != nil {
+		//skip
+	}
+	c.Redirect(http.StatusFound, ("/users"))
 }
