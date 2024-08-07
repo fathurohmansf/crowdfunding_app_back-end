@@ -97,6 +97,8 @@ func main() {
 	router.GET("/users", userWebHandler.Index)
 	// route untuk newUser di CMS admin
 	router.GET("/users/new", userWebHandler.New)
+	// route untuk New user kirim data dari form ke database
+	router.POST("/users", userWebHandler.Create)
 
 	router.Run()
 }
