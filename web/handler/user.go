@@ -32,6 +32,17 @@ func (h *userHandler) Index(c *gin.Context) {
 	c.HTML(http.StatusOK, "user_index.html", gin.H{"users": users}) //pakai map gin.H untuk bisa akses ke var users, dgn key(untuk template) & value(dari service)
 }
 
+// func untuk new User
 func (h *userHandler) New(c *gin.Context) {
 	c.HTML(http.StatusOK, "user_new.html", nil)
+}
+
+// func untuk data form user kirim ke database
+func (h *userHandler) Create(c *gin.Context) {
+	var input user.FormCreateUserInput
+
+	err := c.ShouldBind(&input)
+	if err != nil {
+		// skip
+	}
 }

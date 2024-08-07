@@ -91,6 +91,8 @@ func main() {
 	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
 	// route untuk Transaction Notification Midtrans
 	api.POST("/transactions/notification", transactionHandler.GetNotification)
+
+	// Route for CMS admin
 	// jika ada request ke /users maka akan di arahkan ke webhandler.index
 	router.GET("/users", userWebHandler.Index)
 	// route untuk newUser di CMS admin
