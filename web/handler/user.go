@@ -44,6 +44,9 @@ func (h *userHandler) Create(c *gin.Context) {
 	err := c.ShouldBind(&input)
 	if err != nil {
 		// skip
+		input.Error = err
+		c.HTML(http.StatusOK, "user_new.html", input)
+		return
 	}
 
 	RegisterInput := user.RegisterUserInput{}
@@ -55,6 +58,8 @@ func (h *userHandler) Create(c *gin.Context) {
 	_, err = h.userService.RegisterUser(RegisterInput)
 	if err != nil {
 		//skip
+		c.HTML(http.StatusInternalServerError, "error.html", nil)
+		return
 	}
 	c.Redirect(http.StatusFound, ("/users"))
 }
