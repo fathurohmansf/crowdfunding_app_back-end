@@ -101,6 +101,8 @@ func main() {
 	router.POST("/users", userWebHandler.Create)
 	// route untuk ID Param / ID User nanti buat Edit/Update User
 	router.GET("/users/edit/:id", userWebHandler.Edit)
+	// route untuk update user di CMS
+	router.POST("/users/update/:id", userWebHandler.Update)
 
 	router.Run()
 }
