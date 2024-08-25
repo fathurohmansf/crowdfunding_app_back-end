@@ -79,3 +79,11 @@ func (h *userHandler) Edit(c *gin.Context) {
 	c.HTML(http.StatusOK, "user_edit.html", registeredUser) // Mem passing nilai/value yang akan di tampilkan
 
 }
+
+// func Update User
+func (h *userHandler) Update(c *gin.Context) {
+	// Tangkap ID user nya dulu menggunakan IdParam
+	idParam := c.Param("id")
+	// gunakan servis GetUserByID di user/service.go dan convert ID int to string
+	id, _ := strconv.Atoi(idParam)
+}
