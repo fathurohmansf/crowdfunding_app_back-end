@@ -3,6 +3,7 @@ package handler
 import (
 	"crowdfunding/user"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -62,4 +63,19 @@ func (h *userHandler) Create(c *gin.Context) {
 		return
 	}
 	c.Redirect(http.StatusFound, ("/users"))
+}
+
+// Func untuk Edit/Update User di halaman user_edit.html
+func (h *userHandler) Edit(c *gin.Context) {
+	// Tangkap ID user nya dulu menggunakan IdParam
+	idParam := c.Param("id")
+	// gunakan servis GetUserByID di user/service.go dan convert ID int to string
+	id, _ := strconv.Atoi(idParam)
+
+	registeredUser, err := h.userService.GetUserByID(id)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", nil)
+	}
+	c.HTML(http.StatusOK, "user_edit.html", registeredUser) // Mem passing nilai/value yang akan di tampilkan
+
 }

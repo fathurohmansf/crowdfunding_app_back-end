@@ -99,6 +99,8 @@ func main() {
 	router.GET("/users/new", userWebHandler.New)
 	// route untuk New user kirim data dari form ke database
 	router.POST("/users", userWebHandler.Create)
+	// route untuk ID Param / ID User nanti buat Edit/Update User
+	router.GET("/users/edit/:id", userWebHandler.Edit)
 
 	router.Run()
 }

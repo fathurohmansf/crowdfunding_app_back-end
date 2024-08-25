@@ -1,11 +1,6 @@
 {{ define "home" }}
 <h2>Edit New User</h2>
 
-{{ if .Error }}
-<div class="alert alert-dager">
-    {{ .Error }}
-</div>
-{{end}}
 
 <form action="/users/update/{{ .ID }}" method="POST">
     <div class="form-group">
