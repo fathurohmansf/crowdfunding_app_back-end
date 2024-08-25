@@ -25,6 +25,7 @@ type FormCreateUserInput struct {
 }
 
 type FormUpdateUserInput struct {
+	ID         int
 	Name       string `form:"name" binding:"required"`
 	Email      string `form:"email" binding:"required,email"` // data ,email di sini untuk membaca cache user email di browser
 	Occupation string `form:"occupation" binding:"required"`
