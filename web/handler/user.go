@@ -86,4 +86,19 @@ func (h *userHandler) Update(c *gin.Context) {
 	idParam := c.Param("id")
 	// gunakan servis GetUserByID di user/service.go dan convert ID int to string
 	id, _ := strconv.Atoi(idParam)
+
+	var input user.FormUpdateUserInput
+
+	err := c.ShouldBind(&input)
+	if err != nil {
+		//skip
+	}
+	// Bind manual ID nya
+	input.ID = id
+	_, err = h.userService.UpdateUser(input)
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", nil)
+		return
+	}
+	c.Redirect(http.StatusFound, "/users")
 }
