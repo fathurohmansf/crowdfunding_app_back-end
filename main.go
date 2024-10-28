@@ -103,6 +103,10 @@ func main() {
 	router.GET("/users/edit/:id", userWebHandler.Edit)
 	// route untuk update user di CMS
 	router.POST("/users/update/:id", userWebHandler.Update)
+	// route untuk upload avatar di CMS
+	router.GET("/users/avatar/:id", userWebHandler.NewAvatar)
+	// route untuk crate avatar upload di CMS
+	router.POST("/users/avatar/:id", userWebHandler.CreateAvatar)
 
 	router.Run()
 }
