@@ -38,6 +38,7 @@ func (h *transactionHandler) GetCampaignTransaction(c *gin.Context) {
 		return
 	}
 	response := helper.APIResponse("Campaign's transactions", http.StatusOK, "success", transaction.FormatCampaignTransactions(transactions))
+	//response := helper.APIResponse("Campaign's transactions", http.StatusOK, "success", transactions)
 	c.JSON(http.StatusOK, response)
 }
 
@@ -51,7 +52,7 @@ func (h *transactionHandler) GetUserTranactions(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-	response := helper.APIResponse("User's transactions", http.StatusOK, "success", transaction.FormatUserTransactions(trasactions))
+	response := helper.APIResponse("User's transactions", http.StatusOK, "success", trasactions)
 	c.JSON(http.StatusOK, response)
 }
 
@@ -73,14 +74,14 @@ func (h *transactionHandler) CreateTransaction(c *gin.Context) {
 	currentUser := c.MustGet("currentUser").(user.User)
 	input.User = currentUser
 
-	NewTransaction, err := h.service.CreateTransaction(input)
+	// NewTransaction, err := h.service.CreateTransaction(input)
 	if err != nil {
 		response := helper.APIResponse("Failed to create transaction", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
-	response := helper.APIResponse("Success to create transaction", http.StatusOK, "success", transaction.FormatTransaction(NewTransaction))
-	c.JSON(http.StatusOK, response)
+	// response := helper.APIResponse("Success to create transaction", http.StatusOK, "success", transaction.FormatTransaction(NewTransaction))
+	// c.JSON(http.StatusOK, response)
 }
 
 func (h *transactionHandler) GetNotification(c *gin.Context) {
