@@ -51,8 +51,8 @@ func main() {
 	userHandler := handler.NewUserHandler(userService, authService) // tambahkan authService
 	campaignHandler := handler.NewCampaignHandler(campaignService)  // tambahkan campaigns
 	transactionHandler := handler.NewTransactionHandler(transactionService)
-	userWebHandler := webHandler.NewUserHandler(userService)             // untuk handler web admin CMS
-	campaignWebHandler := webHandler.NewCampaignHandler(campaignService) // untuk handler web admin CMS
+	userWebHandler := webHandler.NewUserHandler(userService)                          // untuk handler web admin CMS
+	campaignWebHandler := webHandler.NewCampaignHandler(campaignService, userService) // untuk handler web admin CMS
 
 	// ROUTE
 	router := gin.Default()
@@ -110,6 +110,8 @@ func main() {
 	router.POST("/users/avatar/:id", userWebHandler.CreateAvatar)
 	// route untuk all campaign di CMS
 	router.GET("/campaigns", campaignWebHandler.Index)
+	// route untuk new campaign di CMS
+	router.GET("/campaigns/new", campaignWebHandler.New)
 
 	router.Run()
 }
