@@ -112,6 +112,8 @@ func main() {
 	router.GET("/campaigns", campaignWebHandler.Index)
 	// route untuk new campaign di CMS
 	router.GET("/campaigns/new", campaignWebHandler.New)
+	// route untuk submit new campaign di CMS POST
+	router.POST("/campaigns", campaignWebHandler.Create)
 
 	router.Run()
 }
