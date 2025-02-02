@@ -16,6 +16,8 @@ type Repository interface {
 	Update(transaction Transaction) (Transaction, error)
 
 	GetByID(ID int) (Transaction, error)
+
+	GetLastTransaction(ID int) (Transaction, error)
 }
 
 func NewRepository(db *gorm.DB) *repository {
@@ -61,6 +63,15 @@ func (r *repository) Update(transaction Transaction) (Transaction, error) {
 func (r *repository) GetByID(ID int) (Transaction, error) {
 	var transaction Transaction
 	err := r.db.Where("id = ?", ID).Find(&transaction).Error
+	if err != nil {
+		return transaction, err
+	}
+	return transaction, nil
+}
+
+func (r *repository) GetLastTransaction(ID int) (Transaction, error) {
+	var transaction Transaction
+	err := r.db.Order("id DESC").First(&transaction).Error
 	if err != nil {
 		return transaction, err
 	}

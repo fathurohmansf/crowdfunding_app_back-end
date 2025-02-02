@@ -4,7 +4,9 @@ import (
 	"crowdfunding/campaign"
 	"crowdfunding/payment"
 	"errors"
+	"fmt"
 	"strconv"
+	"strings"
 )
 
 type service struct {
@@ -63,7 +65,30 @@ func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, 
 	transaction.Amount = input.Amount
 	transaction.UserID = input.User.ID
 	transaction.Status = "panding"
-	transaction.Code = "ORDER-001"
+	// transaction.Code = "ORDER-001"
+
+	// Logic to generate Transaction Code
+	lastTransaction, err := s.repository.GetLastTransaction(transaction.ID)
+	if err != nil {
+		return transaction, fmt.Errorf("Gagal mendapatkan ID last Transaction: %v", err)
+	}
+
+	if lastTransaction.ID == 0 {
+		// define awal Code transaction
+		transaction.Code = "ORDER-001"
+	} else {
+		// increment the last transaction number Code
+		parts := strings.Split(lastTransaction.Code, "-")
+		if len(parts) == 2 {
+			lastNumber, err := strconv.Atoi(parts[1])
+			if err != nil {
+				return transaction, fmt.Errorf("failed to parse last transaction code: %v", err)
+			}
+			transaction.Code = fmt.Sprintf("ORDER-%03d", lastNumber+1)
+		} else {
+			return transaction, fmt.Errorf("invalid transaction code format in last transaction: %s", lastTransaction.Code)
+		}
+	}
 
 	newTranscation, err := s.repository.Save(transaction)
 	if err != nil {

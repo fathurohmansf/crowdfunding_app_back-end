@@ -19,6 +19,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -114,6 +115,12 @@ func main() {
 	router.GET("/campaigns/new", campaignWebHandler.New)
 	// route untuk submit new campaign di CMS POST
 	router.POST("/campaigns", campaignWebHandler.Create)
+
+	// Find & load .env file
+	err = godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	router.Run()
 }
