@@ -115,6 +115,8 @@ func main() {
 	router.GET("/campaigns/new", campaignWebHandler.New)
 	// route untuk submit new campaign di CMS POST
 	router.POST("/campaigns", campaignWebHandler.Create)
+	// route untuk upload new image campaign di CMS
+	router.GET("/campaigns/image/:id", campaignWebHandler.NewImage)
 
 	// Find & load .env file
 	err = godotenv.Load(".env")
