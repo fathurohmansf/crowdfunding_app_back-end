@@ -1,0 +1,42 @@
+{{ define "home" }}
+
+<h2 class="mb-4">Edit Campaign</h2>
+
+{{ if .Error }}
+<div class="alert alert-danger">
+  {{ .Error }}
+</div>
+{{ end }}
+
+<div class="card mb-4">
+  <div class="card-body">
+    <form action="/campaigns/update/{{ .ID }}" method="POST">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" value="{{ .Name }}" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="short_description">Short Description</label>
+        <textarea name="short_description" required class="form-control">{{ .ShortDescription }}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" required class="form-control">{{ .Description }}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="goal_amount">Goal Amount</label>
+        <input type="number" name="goal_amount" value="{{ .GoalAmount }}" required class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="perks">Perks</label>
+        <textarea name="perks" required class="form-control">{{ .Perks }}</textarea>
+      </div>
+
+      <div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{{ end }}

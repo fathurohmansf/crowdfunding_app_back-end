@@ -25,6 +25,7 @@ type CreateCampaignImageInput struct {
 
 // Membuat struct baru untuk Form New Campaign di CMS
 type FormCreateCampaignInput struct {
+	ID               int
 	Name             string `form:"name" binding:"required"`
 	ShortDescription string `form:"short_description" binding:"required"`
 	Description      string `form:"description" binding:"required"`

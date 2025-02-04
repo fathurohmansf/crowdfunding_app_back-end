@@ -141,3 +141,24 @@ func (h *campaignhandler) CreateImage(c *gin.Context) {
 
 	c.Redirect(http.StatusFound, "/campaigns")
 }
+
+func (h *campaignhandler) Edit(c *gin.Context) {
+	idParam := c.Param("id")
+	id, _ := strconv.Atoi(idParam)
+
+	existingCampaign, err := h.campaignService.GetCampaignByID(campaign.GetCampaignDetailInput{ID: id})
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", nil)
+		return
+	}
+	// userID := existingCampaign.UserID
+	input := campaign.FormCreateCampaignInput{}
+	input.ID = existingCampaign.ID
+	input.Name = existingCampaign.Name
+	input.ShortDescription = existingCampaign.ShortDescription
+	input.Description = existingCampaign.Description
+	input.GoalAmount = existingCampaign.GoalAmount
+	input.Perks = existingCampaign.Perks
+
+	c.HTML(http.StatusOK, "campaign_edit.html", input)
+}
