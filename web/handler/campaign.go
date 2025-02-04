@@ -208,3 +208,16 @@ func (h *campaignhandler) Update(c *gin.Context) {
 	}
 	c.Redirect(http.StatusFound, "/campaigns")
 }
+
+func (h *campaignhandler) Show(c *gin.Context) {
+	idParam := c.Param("id")
+	id, _ := strconv.Atoi(idParam)
+
+	existingCampaign, err := h.campaignService.GetCampaignByID(campaign.GetCampaignDetailInput{ID: id})
+	if err != nil {
+		c.HTML(http.StatusInternalServerError, "error.html", nil)
+		return
+	}
+
+	c.HTML(http.StatusOK, "campaign_show.html", existingCampaign)
+}

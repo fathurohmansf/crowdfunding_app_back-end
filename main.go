@@ -123,6 +123,8 @@ func main() {
 	router.GET("/campaigns/edit/:id", campaignWebHandler.Edit)
 	// route untuk update campaign di CMS
 	router.POST("/campaigns/update/:id", campaignWebHandler.Update)
+	// route untuk show detail campaign di CMS
+	router.GET("/campaigns/show/:id", campaignWebHandler.Show)
 
 	// Find & load .env file
 	err = godotenv.Load(".env")
