@@ -57,6 +57,7 @@ func main() {
 	userWebHandler := webHandler.NewUserHandler(userService)                          // untuk handler web admin CMS
 	campaignWebHandler := webHandler.NewCampaignHandler(campaignService, userService) // untuk handler web admin CMS
 	transactionsWebHandler := webHandler.NewTransactionHandler(transactionService)    // untuk handler web admin CMS
+	sessionsWebHandler := webHandler.NewSessionHandler(userService)                   // untuk handler web admin CMS
 
 	// ROUTE
 	router := gin.Default()
@@ -135,6 +136,8 @@ func main() {
 	router.GET("/campaigns/show/:id", authAdminMiddleware(), campaignWebHandler.Show)
 	// route untuk show all transactions
 	router.GET("/transactions", authAdminMiddleware(), transactionsWebHandler.Index)
+	// route untuk login CMS
+	router.POST("/login", sessionsWebHandler.New)
 
 	// Find & load .env file
 	err = godotenv.Load(".env")
