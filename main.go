@@ -18,6 +18,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/multitemplate"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -60,6 +62,11 @@ func main() {
 	router := gin.Default()
 	// CoRS for client
 	router.Use(cors.Default())
+
+	// session login CMS middleware
+	cookieStore := cookie.NewStore([]byte(auth.SECRET_KEY))
+	router.Use(sessions.Sessions("senabung", cookieStore))
+
 	// add layoutRendering in untuk web admin
 	router.HTMLRender = loadTemplates("./web/templates")
 	// Static Image
@@ -97,37 +104,37 @@ func main() {
 
 	// Route for CMS admin
 	// jika ada request ke /users maka akan di arahkan ke webhandler.index
-	router.GET("/users", userWebHandler.Index)
+	router.GET("/users", authAdminMiddleware(), userWebHandler.Index)
 	// route untuk newUser di CMS admin
-	router.GET("/users/new", userWebHandler.New)
+	router.GET("/users/new", authAdminMiddleware(), userWebHandler.New)
 	// route untuk New user kirim data dari form ke database
-	router.POST("/users", userWebHandler.Create)
+	router.POST("/users", authAdminMiddleware(), userWebHandler.Create)
 	// route untuk ID Param / ID User nanti buat Edit/Update User
-	router.GET("/users/edit/:id", userWebHandler.Edit)
+	router.GET("/users/edit/:id", authAdminMiddleware(), userWebHandler.Edit)
 	// route untuk update user di CMS
-	router.POST("/users/update/:id", userWebHandler.Update)
+	router.POST("/users/update/:id", authAdminMiddleware(), userWebHandler.Update)
 	// route untuk upload avatar di CMS
-	router.GET("/users/avatar/:id", userWebHandler.NewAvatar)
+	router.GET("/users/avatar/:id", authAdminMiddleware(), userWebHandler.NewAvatar)
 	// route untuk crate avatar upload di CMS
-	router.POST("/users/avatar/:id", userWebHandler.CreateAvatar)
+	router.POST("/users/avatar/:id", authAdminMiddleware(), userWebHandler.CreateAvatar)
 	// route untuk all campaign di CMS
-	router.GET("/campaigns", campaignWebHandler.Index)
+	router.GET("/campaigns", authAdminMiddleware(), campaignWebHandler.Index)
 	// route untuk new campaign di CMS
-	router.GET("/campaigns/new", campaignWebHandler.New)
+	router.GET("/campaigns/new", authAdminMiddleware(), campaignWebHandler.New)
 	// route untuk submit new campaign di CMS POST
-	router.POST("/campaigns", campaignWebHandler.Create)
+	router.POST("/campaigns", authAdminMiddleware(), campaignWebHandler.Create)
 	// route untuk upload new image campaign di CMS
-	router.GET("/campaigns/image/:id", campaignWebHandler.NewImage)
+	router.GET("/campaigns/image/:id", authAdminMiddleware(), campaignWebHandler.NewImage)
 	// route untuk submit new image camoaign di CMS
-	router.POST("/campaigns/image/:id", campaignWebHandler.CreateImage)
+	router.POST("/campaigns/image/:id", authAdminMiddleware(), campaignWebHandler.CreateImage)
 	// route untuk edit campaign dari params di CMS
-	router.GET("/campaigns/edit/:id", campaignWebHandler.Edit)
+	router.GET("/campaigns/edit/:id", authAdminMiddleware(), campaignWebHandler.Edit)
 	// route untuk update campaign di CMS
-	router.POST("/campaigns/update/:id", campaignWebHandler.Update)
+	router.POST("/campaigns/update/:id", authAdminMiddleware(), campaignWebHandler.Update)
 	// route untuk show detail campaign di CMS
-	router.GET("/campaigns/show/:id", campaignWebHandler.Show)
+	router.GET("/campaigns/show/:id", authAdminMiddleware(), campaignWebHandler.Show)
 	// route untuk show all transactions
-	router.GET("/transactions", transactionsWebHandler.Index)
+	router.GET("/transactions", authAdminMiddleware(), transactionsWebHandler.Index)
 
 	// Find & load .env file
 	err = godotenv.Load(".env")
@@ -180,6 +187,20 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 		}
 
 		c.Set("currentUser", user)
+	}
+}
+
+// middleware for CMS
+func authAdminMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		// gunakan key userID
+		userIDSession := session.Get("userID")
+		if userIDSession == nil {
+			c.Redirect(http.StatusFound, "/login")
+			return
+		}
+
 	}
 }
 
