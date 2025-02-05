@@ -4,6 +4,8 @@ import (
 	"crowdfunding/campaign"
 	"crowdfunding/user"
 	"time"
+
+	"github.com/leekchan/accounting"
 )
 
 type Transaction struct {
@@ -18,4 +20,10 @@ type Transaction struct {
 	Campaign   campaign.Campaign //untuk relasi ke campaign images
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
+}
+
+// buat func untuk formatting GoalAmount CMS
+func (t Transaction) AmountFormatIDR() string {
+	ac := accounting.Accounting{Symbol: "Rp. ", Precision: 2, Thousand: ".", Decimal: ","}
+	return ac.FormatMoney(t.Amount)
 }
