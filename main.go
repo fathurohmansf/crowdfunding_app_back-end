@@ -137,7 +137,9 @@ func main() {
 	// route untuk show all transactions
 	router.GET("/transactions", authAdminMiddleware(), transactionsWebHandler.Index)
 	// route untuk login CMS
-	router.POST("/login", sessionsWebHandler.New)
+	router.GET("/login", sessionsWebHandler.New)
+	// route untuk submit login CMS
+	router.POST("/sessions", sessionsWebHandler.Create)
 
 	// Find & load .env file
 	err = godotenv.Load(".env")
